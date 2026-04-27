@@ -14,6 +14,12 @@ import com.kgplatform.system.service.ICurrentUserAccessService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * 认证服务实现类
+ *
+ * @author kg_chen
+ * @since 2026-04-27 17:26:26
+ */
 @Service
 public class AuthServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> implements AuthService {
 
@@ -34,9 +40,9 @@ public class AuthServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> imple
 
     @Override
     public LoginDto login(LoginVo vo) {
-        Asserts.notNull(vo, "Login payload can not be null");
-        Asserts.notBlank(vo.getUsername(), "Username can not be blank");
-        Asserts.notBlank(vo.getPassword(), "Password can not be blank");
+        Asserts.notNull(vo, "登录参数不能为空");
+        Asserts.notBlank(vo.getUsername(), "用户名不能为空");
+        Asserts.notBlank(vo.getPassword(), "密码不能为空");
 
         AuthUser authUser = authUserMapper.selectByUsername(vo.getUsername());
         boolean invalid = authUser == null
@@ -47,15 +53,15 @@ public class AuthServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> imple
                 || authUser.getPassword() == null
                 || authUser.getPassword().isBlank()
                 || !passwordEncoder.matches(vo.getPassword(), authUser.getPassword());
-        Asserts.isTrue(!invalid, "Username or password is invalid");
+        Asserts.isTrue(!invalid, "用户名或密码错误");
 
         return new LoginDto(jwtUtils.createToken(authUser.getId(), authUser.getUsername()));
     }
 
     @Override
     public CurrentUserDto currentUser(Long currentUserId, String currentUsername) {
-        Asserts.notNull(currentUserId, "Current user id can not be null");
-        Asserts.notBlank(currentUsername, "Current username can not be blank");
+        Asserts.notNull(currentUserId, "当前登录用户主键不能为空");
+        Asserts.notBlank(currentUsername, "当前登录用户名不能为空");
 
         CurrentUserAccessDto accessDto = currentUserAccessService.getCurrentUserAccess(currentUserId);
         CurrentUserDto currentUserDto = new CurrentUserDto();

@@ -10,11 +10,17 @@ import com.kgplatform.system.domain.po.Menu;
 import com.kgplatform.system.domain.vo.MenuVo;
 import com.kgplatform.system.mapper.MenuMapper;
 import com.kgplatform.system.service.IMenuService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+/**
+ * 系统菜单 Service 实现类
+ * <p>
+ * MenuServiceImpl Service 实现类
+ *
+ * @author kg_chen
+ * @since 2026-04-27 17:41:45
+ */
 
-@Slf4j
 @Service("menuService")
 @Transactional(rollbackFor = Exception.class)
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {

@@ -14,7 +14,7 @@ import java.io.Serializable;
 /**
  * 用户租户关系
  * <p>
- * UserTenant表实体类
+ * UserTenant实体类
  *
  * @author kg_chen
  * @since 2026-04-23 22:40:00

@@ -12,17 +12,30 @@ import com.kgplatform.system.service.IUserRoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Slf4j
+/**
+ * 用户角色关系控制层
+ * <p>
+ * UserRoleResource控制层
+ *
+ * @author kg_chen
+ * @since 2026-04-27 17:26:26
+ */
 @Validated
 @RestController
-@Tag(name = "UserRoleResource", description = "User role relation")
+@Tag(name = "UserRoleResource", description = "用户角色关系")
 @RequestMapping(path = "/user-roles", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserRoleResource {
 
@@ -34,20 +47,35 @@ public class UserRoleResource {
         this.userRoleConverter = userRoleConverter;
     }
 
+    /**
+     * 分页查询用户角色关系
+     *
+     * @param current 当前页码
+     * @param size    每页条数
+     * @param vo      查询条件
+     * @return 分页结果
+     */
     @GetMapping("/pages")
-    @Operation(summary = "Page query user role relations")
+    @Operation(summary = "分页查询用户角色关系")
     public Result<Page<UserRoleDto>> selectAll(
-            @Parameter(description = "Current page") @RequestParam(required = false, defaultValue = "0") Integer current,
-            @Parameter(description = "Page size") @RequestParam(required = false, defaultValue = "10") Integer size,
+            @Parameter(description = "当前页码") @RequestParam(required = false, defaultValue = "0") Integer current,
+            @Parameter(description = "每页条数") @RequestParam(required = false, defaultValue = "10") Integer size,
             UserRoleVo vo) {
         return Result.ok(this.userRoleService.selectPage(current, size, vo));
     }
 
+    /**
+     * 根据用户和角色查询关系是否重复
+     *
+     * @param userId 用户ID
+     * @param roleId 角色ID
+     * @return 查询结果
+     */
     @GetMapping("/codes")
-    @Operation(summary = "Query relation by user and role")
+    @Operation(summary = "根据用户和角色查询关系是否重复")
     public Result<List<UserRole>> selectByUserAndRole(
-            @Parameter(description = "User id") @RequestParam Long userId,
-            @Parameter(description = "Role id") @RequestParam Long roleId) {
+            @Parameter(description = "用户ID") @RequestParam Long userId,
+            @Parameter(description = "角色ID") @RequestParam Long roleId) {
         return Result.ok(this.userRoleService.list(Wrappers.<UserRole>lambdaQuery()
                 .eq(UserRole::getUserId, userId)
                 .eq(UserRole::getRoleId, roleId)
@@ -55,28 +83,52 @@ public class UserRoleResource {
                 .eq(UserRole::getDeleteStatus, Boolean.FALSE)));
     }
 
+    /**
+     * 根据主键查询用户角色关系
+     *
+     * @param id 主键
+     * @return 查询结果
+     */
     @GetMapping
-    @Operation(summary = "Query one user role relation")
-    public Result<UserRoleDto> selectOne(@Parameter(description = "Id") @RequestParam Long id) {
+    @Operation(summary = "根据主键查询用户角色关系")
+    public Result<UserRoleDto> selectOne(@Parameter(description = "主键") @RequestParam Long id) {
         return Result.ok(this.userRoleConverter.domain2Dto(this.userRoleService.getById(id)));
     }
 
+    /**
+     * 新增用户角色关系
+     *
+     * @param vo 入参
+     * @return 新增结果
+     */
     @PostMapping
-    @Operation(summary = "Create user role relation")
+    @Operation(summary = "新增用户角色关系")
     public Result<Boolean> insert(@RequestBody UserRoleVo vo) {
         return Result.ok(this.userRoleService.saveUserRole(vo));
     }
 
+    /**
+     * 修改用户角色关系
+     *
+     * @param vo 修改条件
+     * @return 修改结果
+     */
     @PutMapping
-    @Operation(summary = "Update user role relation")
+    @Operation(summary = "修改用户角色关系")
     public Result<Boolean> update(@RequestBody UserRoleVo vo) {
-        Asserts.notNull(vo.getId(), "Id can not be null");
+        Asserts.notNull(vo.getId(), "主键不能为空");
         return Result.ok(this.userRoleService.update(vo));
     }
 
+    /**
+     * 删除用户角色关系
+     *
+     * @param id 主键
+     * @return 删除结果
+     */
     @DeleteMapping
-    @Operation(summary = "Delete user role relation")
-    public Result<Boolean> delete(@Parameter(description = "Id") @RequestParam("id") Long id) {
+    @Operation(summary = "删除用户角色关系")
+    public Result<Boolean> delete(@Parameter(description = "主键") @RequestParam("id") Long id) {
         return Result.ok(this.userRoleService.delete(id));
     }
 }

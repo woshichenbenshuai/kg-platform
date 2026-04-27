@@ -13,7 +13,8 @@ import javax.validation.constraints.Size;
 /**
  * 系统用户
  * <p>
- * User表入参类
+ * UserVo入参对象
+¥åå¯¹è±¡
  *
  * @author kg_chen
  * @since 2026-04-23 20:40:00

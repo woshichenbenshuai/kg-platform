@@ -27,6 +27,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * 当前用户访问聚合 Service 实现类
+ *
+ * @author kg_chen
+ * @since 2026-04-27 17:26:26
+ */
 @Service("currentUserAccessService")
 @Transactional(rollbackFor = Exception.class, readOnly = true)
 public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
@@ -54,12 +60,12 @@ public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
 
     @Override
     public CurrentUserAccessDto getCurrentUserAccess(Long userId) {
-        Asserts.notNull(userId, "User id can not be null");
+        Asserts.notNull(userId, "用户主键不能为空");
 
         User user = userService.getById(userId);
-        Asserts.notNull(user, "User does not exist");
-        Asserts.isTrue(Boolean.FALSE.equals(user.getDeleteStatus()), "User does not exist");
-        Asserts.isTrue(Integer.valueOf(1).equals(user.getStatus()), "User is disabled");
+        Asserts.notNull(user, "用户不存在");
+        Asserts.isTrue(Boolean.FALSE.equals(user.getDeleteStatus()), "用户不存在");
+        Asserts.isTrue(Integer.valueOf(1).equals(user.getStatus()), "用户已禁用");
 
         UserTenant userTenant = getCurrentUserTenant(userId);
         List<Role> roles = getCurrentRoles(userId);
@@ -92,7 +98,7 @@ public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
                 .eq(UserTenant::getStatus, Boolean.TRUE)
                 .orderByDesc(UserTenant::getDefaultFlag)
                 .orderByAsc(UserTenant::getId));
-        Asserts.isTrue(!userTenants.isEmpty(), "Current user has no active tenant binding");
+        Asserts.isTrue(!userTenants.isEmpty(), "当前用户未绑定有效租户");
         return userTenants.get(0);
     }
 

@@ -12,7 +12,7 @@ import java.io.Serializable;
 /**
  * 角色菜单关系
  * <p>
- * RoleMenu表实体类
+ * RoleMenu实体类
  *
  * @author kg_chen
  * @since 2026-04-24 23:50:00

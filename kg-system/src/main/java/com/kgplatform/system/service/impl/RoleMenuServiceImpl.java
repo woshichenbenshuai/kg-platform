@@ -10,11 +10,17 @@ import com.kgplatform.system.domain.po.RoleMenu;
 import com.kgplatform.system.domain.vo.RoleMenuVo;
 import com.kgplatform.system.mapper.RoleMenuMapper;
 import com.kgplatform.system.service.IRoleMenuService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+/**
+ * è§è²èåå³ç³» Service å®ç°ç±»
+ * <p>
+ * RoleMenuServiceImpl Service å®ç°ç±»
+ *
+ * @author kg_chen
+ * @since 2026-04-27 17:41:45
+ */
 
-@Slf4j
 @Service("roleMenuService")
 @Transactional(rollbackFor = Exception.class)
 public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements IRoleMenuService {

@@ -12,7 +12,8 @@ import javax.validation.constraints.Size;
 /**
  * 系统字典数据
  * <p>
- * DictValue表入参类
+ * DictValueVo入参对象
+¥åå¯¹è±¡
  *
  * @author kg_chen
  * @since 2023-12-29 11:07:02

@@ -9,22 +9,20 @@ import com.kgplatform.system.domain.po.DictValue;
 import com.kgplatform.system.domain.vo.DictValueVo;
 import com.kgplatform.system.mapper.DictValueMapper;
 import com.kgplatform.system.service.IDictValueService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 
 /**
- * 系统字典数据
+ * 系统字典数据 Service 实现类
  * <p>
- * DictValue表服务实现类
+ * DictValueServiceImpl Service 实现类
  *
  * @author kg_chen
  * @since 2023-12-29 11:07:03
  */
 
-@Slf4j
 @Service("dictValueService")
 @Transactional(rollbackFor = Exception.class)
 public class DictValueServiceImpl extends ServiceImpl<DictValueMapper, DictValue>

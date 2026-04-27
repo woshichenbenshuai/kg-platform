@@ -5,11 +5,19 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.kgplatform.system.domain.dto.RoleDto;
 import com.kgplatform.system.domain.po.Role;
 import com.kgplatform.system.domain.vo.RoleVo;
+/**
+ * 系统角色 Service 接口
+ * <p>
+ * IRoleService Service 接口
+ *
+ * @author kg_chen
+ * @since 2026-04-27 17:41:45
+ */
 
 public interface IRoleService extends IService<Role> {
 
     /**
-     * 分页查询所有数据。
+     * 分页查询所有数据
      *
      * @param current 当前页码
      * @param size 每页条数
@@ -19,7 +27,7 @@ public interface IRoleService extends IService<Role> {
     Page<RoleDto> selectPage(Integer current, Integer size, RoleVo vo);
 
     /**
-     * 新增角色。
+     * 新增角色
      *
      * @param vo 入参
      * @return 新增结果
@@ -27,7 +35,7 @@ public interface IRoleService extends IService<Role> {
     boolean saveRole(RoleVo vo);
 
     /**
-     * 修改角色。
+     * 修改角色
      *
      * @param vo 修改条件
      * @return 修改结果
@@ -35,7 +43,7 @@ public interface IRoleService extends IService<Role> {
     Boolean update(RoleVo vo);
 
     /**
-     * 删除角色。
+     * 删除角色
      *
      * @param id 主键
      * @return 删除结果

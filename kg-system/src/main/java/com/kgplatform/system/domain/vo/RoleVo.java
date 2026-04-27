@@ -11,7 +11,8 @@ import javax.validation.constraints.Size;
 /**
  * 系统角色
  * <p>
- * Role表入参类
+ * RoleVo入参对象
+¥åå¯¹è±¡
  *
  * @author kg_chen
  * @since 2026-04-24 22:10:00

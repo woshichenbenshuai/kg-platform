@@ -10,21 +10,19 @@ import com.kgplatform.system.domain.vo.DictTypeVo;
 import com.kgplatform.system.mapper.DictTypeMapper;
 import com.kgplatform.system.mapper.DictValueMapper;
 import com.kgplatform.system.service.IDictTypeService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 
 /**
- * 系统字典类型
+ * 系统字典类型 Service 实现类
  * <p>
- * DictType表服务实现类
+ * DictTypeServiceImpl Service 实现类
  *
  * @author kg_chen
  * @since 2023-12-29 11:06:01
  */
-@Slf4j
 @Service("dictTypeService")
 @Transactional(rollbackFor = Exception.class)
 public class DictTypeServiceImpl extends ServiceImpl<DictTypeMapper, DictType>

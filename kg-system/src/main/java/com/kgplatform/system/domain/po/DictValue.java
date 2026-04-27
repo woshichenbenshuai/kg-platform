@@ -16,7 +16,7 @@ import java.io.Serializable;
 /**
  * 系统字典数据
  * <p>
- * DictValue表实体类
+ * DictValue实体类
  *
  * @author kg_chen
  * @since 2023-12-29 11:07:02

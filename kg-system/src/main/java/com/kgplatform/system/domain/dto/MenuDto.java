@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 /**
  * 系统菜单
  * <p>
- * Menu表DTO
+ * MenuDto返回对象
  *
  * @author kg_chen
  * @since 2026-04-23 22:30:00

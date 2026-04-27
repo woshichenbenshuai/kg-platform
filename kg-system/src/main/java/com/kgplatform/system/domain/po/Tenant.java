@@ -13,7 +13,7 @@ import java.io.Serializable;
 /**
  * 系统租户
  * <p>
- * Tenant表实体类
+ * Tenant实体类
  *
  * @author kg_chen
  * @since 2026-04-23 22:50:00

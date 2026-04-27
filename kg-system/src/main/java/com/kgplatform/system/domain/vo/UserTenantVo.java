@@ -11,7 +11,8 @@ import javax.validation.constraints.Size;
 /**
  * 用户租户关系
  * <p>
- * UserTenant表入参类
+ * UserTenantVo入参对象
+¥åå¯¹è±¡
  *
  * @author kg_chen
  * @since 2026-04-23 22:40:00

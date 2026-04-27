@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 /**
  * 系统租户
  * <p>
- * Tenant表DTO
+ * TenantDto返回对象
  *
  * @author kg_chen
  * @since 2026-04-23 22:50:00

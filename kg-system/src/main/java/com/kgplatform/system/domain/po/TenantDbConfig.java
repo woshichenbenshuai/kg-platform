@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 /**
  * 租户数据库配置
  * <p>
- * TenantDbConfig表实体类
+ * TenantDbConfig实体类
  *
  * @author kg_chen
  * @since 2026-04-24 09:10:00

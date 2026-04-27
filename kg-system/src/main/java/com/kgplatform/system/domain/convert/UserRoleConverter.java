@@ -9,6 +9,12 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
+/**
+ * 用户角色关系转换器
+ *
+ * @author kg_chen
+ * @since 2026-04-27 17:26:26
+ */
 @Mapper(componentModel = "spring")
 public interface UserRoleConverter {
 
@@ -26,3 +32,4 @@ public interface UserRoleConverter {
 
     List<UserRoleDto> domains2Dtos(List<UserRole> entities);
 }
+

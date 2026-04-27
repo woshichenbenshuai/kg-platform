@@ -12,7 +12,8 @@ import javax.validation.constraints.Size;
 /**
  * 系统菜单
  * <p>
- * Menu表入参类
+ * MenuVo入参对象
+¥åå¯¹è±¡
  *
  * @author kg_chen
  * @since 2026-04-23 22:30:00

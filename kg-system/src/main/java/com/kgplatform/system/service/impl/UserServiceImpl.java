@@ -10,12 +10,18 @@ import com.kgplatform.system.domain.po.User;
 import com.kgplatform.system.domain.vo.UserVo;
 import com.kgplatform.system.mapper.UserMapper;
 import com.kgplatform.system.service.IUserService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+/**
+ * 系统用户 Service 实现类
+ * <p>
+ * UserServiceImpl Service 实现类
+ *
+ * @author kg_chen
+ * @since 2026-04-27 17:41:45
+ */
 
-@Slf4j
 @Service("userService")
 @Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {

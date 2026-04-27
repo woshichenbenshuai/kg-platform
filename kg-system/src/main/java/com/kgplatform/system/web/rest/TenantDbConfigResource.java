@@ -12,12 +12,19 @@ import com.kgplatform.system.service.ITenantDbConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+/**
+ * ç§æ·æ°æ®åºé
+ç½®æ§å¶å±
+ * <p>
+ * TenantDbConfigResourceæ§å¶å±
+ *
+ * @author kg_chen
+ * @since 2026-04-27 17:41:45
+ */
 
-@Slf4j
 @Validated
 @RestController
 @Tag(name = "TenantDbConfigResource", description = "租户数据库配置")
@@ -32,6 +39,13 @@ public class TenantDbConfigResource {
 
     @GetMapping("/pages")
     @Operation(summary = "分页查询租户数据库配置")
+    /**
+     * 分页查询租户数据库配置
+     *
+     * @param false 当前页码
+     * @param false 每页条数
+     * @return 接口结果
+     */
     public Result<Page<TenantDbConfigDto>> selectAll(
             @Parameter(description = "当前页码") @RequestParam(required = false, defaultValue = "0") Integer current,
             @Parameter(description = "每页条数") @RequestParam(required = false, defaultValue = "10") Integer size,
@@ -41,6 +55,12 @@ public class TenantDbConfigResource {
 
     @GetMapping("/tenant")
     @Operation(summary = "根据租户查询数据库配置是否重复")
+    /**
+     * 根据租户查询数据库配置是否重复
+     *
+     * @param tenantId 租户ID
+     * @return 接口结果
+     */
     public Result<Boolean> selectByTenantId(@Parameter(description = "租户ID") @RequestParam Long tenantId) {
         return Result.ok(this.tenantDbConfigService.count(new LambdaQueryWrapper<TenantDbConfig>()
                 .eq(TenantDbConfig::getTenantId, tenantId)
@@ -49,18 +69,36 @@ public class TenantDbConfigResource {
 
     @GetMapping
     @Operation(summary = "根据主键查询租户数据库配置")
+    /**
+     * 根据主键查询租户数据库配置
+     *
+     * @param id 主键
+     * @return 接口结果
+     */
     public Result<TenantDbConfigDto> selectOne(@Parameter(description = "主键") @RequestParam Long id) {
         return Result.ok(TenantDbConfigConverter.INSTANCE.domain2Dto(this.tenantDbConfigService.getById(id)));
     }
 
     @PostMapping
     @Operation(summary = "新增租户数据库配置")
+    /**
+     * 新增租户数据库配置
+     *
+     * @param vo vo
+     * @return 接口结果
+     */
     public Result<Boolean> insert(@RequestBody TenantDbConfigVo vo) {
         return Result.ok(this.tenantDbConfigService.saveTenantDbConfig(vo));
     }
 
     @PutMapping
     @Operation(summary = "修改租户数据库配置")
+    /**
+     * 修改租户数据库配置
+     *
+     * @param vo vo
+     * @return 接口结果
+     */
     public Result<Boolean> update(@RequestBody TenantDbConfigVo vo) {
         Asserts.notNull(vo.getId(), "主键不能为空");
         return Result.ok(this.tenantDbConfigService.update(vo));
@@ -68,18 +106,36 @@ public class TenantDbConfigResource {
 
     @DeleteMapping
     @Operation(summary = "删除租户数据库配置")
+    /**
+     * 删除租户数据库配置
+     *
+     * @param id 主键
+     * @return 接口结果
+     */
     public Result<Boolean> delete(@Parameter(description = "主键") @RequestParam("id") Long id) {
         return Result.ok(this.tenantDbConfigService.delete(id));
     }
 
     @PostMapping("/test-connection")
     @Operation(summary = "测试租户数据库连接")
+    /**
+     * 测试租户数据库连接
+     *
+     * @param vo vo
+     * @return 接口结果
+     */
     public Result<String> testConnection(@RequestBody TenantDbConfigVo vo) {
         return Result.ok(this.tenantDbConfigService.testConnection(vo));
     }
 
     @GetMapping("/schema-version")
     @Operation(summary = "查询租户子库版本")
+    /**
+     * 查询租户子库版本
+     *
+     * @param tenantId 租户ID
+     * @return 接口结果
+     */
     public Result<String> schemaVersion(@Parameter(description = "租户ID") @RequestParam Long tenantId) {
         return Result.ok(this.tenantDbConfigService.getSchemaVersion(tenantId));
     }

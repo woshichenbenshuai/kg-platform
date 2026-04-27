@@ -7,9 +7,9 @@ import com.kgplatform.system.domain.po.TenantDbConfig;
 import com.kgplatform.system.domain.vo.TenantDbConfigVo;
 
 /**
- * 租户数据库配置
+ * 租户数据库配置 Service 接口
  * <p>
- * TenantDbConfig表服务实现类
+ * ITenantDbConfigService Service 接口
  *
  * @author kg_chen
  * @since 2026-04-24 09:10:00

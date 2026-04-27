@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 /**
  * 系统字典类型
  * <p>
- * DictType表DTO
+ * DictTypeDto返回对象
  *
  * @author kg_chen
  * @since 2023-12-29 11:05:48

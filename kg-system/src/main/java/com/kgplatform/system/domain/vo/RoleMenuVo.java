@@ -9,7 +9,8 @@ import lombok.experimental.Accessors;
 /**
  * 角色菜单关系
  * <p>
- * RoleMenu表入参类
+ * RoleMenuVo入参对象
+¥åå¯¹è±¡
  *
  * @author kg_chen
  * @since 2026-04-24 23:50:00

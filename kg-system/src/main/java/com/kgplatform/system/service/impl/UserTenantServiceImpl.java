@@ -10,11 +10,17 @@ import com.kgplatform.system.domain.po.UserTenant;
 import com.kgplatform.system.domain.vo.UserTenantVo;
 import com.kgplatform.system.mapper.UserTenantMapper;
 import com.kgplatform.system.service.IUserTenantService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+/**
+ * ç¨æ·ç§æ·å³ç³» Service å®ç°ç±»
+ * <p>
+ * UserTenantServiceImpl Service å®ç°ç±»
+ *
+ * @author kg_chen
+ * @since 2026-04-27 17:41:45
+ */
 
-@Slf4j
 @Service("userTenantService")
 @Transactional(rollbackFor = Exception.class)
 public class UserTenantServiceImpl extends ServiceImpl<UserTenantMapper, UserTenant> implements IUserTenantService {

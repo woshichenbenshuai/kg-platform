@@ -13,7 +13,7 @@ import java.io.Serializable;
 /**
  * 系统角色
  * <p>
- * Role表实体类
+ * Role实体类
  *
  * @author kg_chen
  * @since 2026-04-24 22:10:00

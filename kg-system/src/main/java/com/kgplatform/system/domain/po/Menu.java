@@ -15,7 +15,7 @@ import java.io.Serializable;
 /**
  * 系统菜单
  * <p>
- * Menu表实体类
+ * Menu实体类
  *
  * @author kg_chen
  * @since 2026-04-23 22:30:00

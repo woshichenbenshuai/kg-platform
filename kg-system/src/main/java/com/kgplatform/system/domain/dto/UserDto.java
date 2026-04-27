@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 /**
  * 系统用户
  * <p>
- * User表DTO
+ * UserDto返回对象
  *
  * @author kg_chen
  * @since 2026-04-23 20:40:00
