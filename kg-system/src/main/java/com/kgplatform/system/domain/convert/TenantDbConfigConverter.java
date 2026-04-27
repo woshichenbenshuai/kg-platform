@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 租户数据库配置转换器
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TenantDbConfigConverter {
 
     TenantDbConfigConverter INSTANCE = Mappers.getMapper(TenantDbConfigConverter.class);

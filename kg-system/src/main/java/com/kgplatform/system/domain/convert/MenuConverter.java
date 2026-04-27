@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 系统菜单转换器
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface MenuConverter {
 
     MenuConverter INSTANCE = Mappers.getMapper(MenuConverter.class);

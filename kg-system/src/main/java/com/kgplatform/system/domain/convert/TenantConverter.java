@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 系统租户转换器
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TenantConverter {
 
     TenantConverter INSTANCE = Mappers.getMapper(TenantConverter.class);

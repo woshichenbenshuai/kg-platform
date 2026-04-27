@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 系统字典类型转换器
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface DictTypeConverter {
 
     DictTypeConverter INSTANCE = Mappers.getMapper(DictTypeConverter.class);

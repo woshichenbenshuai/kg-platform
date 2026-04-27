@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 用户租户角色关系转换器
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserTenantRoleConverter {
 
     UserTenantRoleConverter INSTANCE = Mappers.getMapper(UserTenantRoleConverter.class);

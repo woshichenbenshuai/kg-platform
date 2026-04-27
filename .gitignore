@@ -19,3 +19,7 @@ Thumbs.db
 # Build caches
 .out/
 out/
+
+# Frontend
+**/node_modules/
+**/dist/

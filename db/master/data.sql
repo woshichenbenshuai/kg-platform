@@ -38,7 +38,7 @@ INSERT INTO sys_user (
   id, username, password, status, delete_status,
   create_by, create_time, last_modified_by, last_modified_time
 ) VALUES
-(1, 'admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 1, b'0', 'system', NOW(), 'system', NOW())
+(1, 'admin', '$2b$10$gRwApN1uS2fYcTWQ84PchOirv0A7ZD4Y9ybSnldeW1BaJZlrTO2LG', 1, b'0', 'system', NOW(), 'system', NOW())
 ON DUPLICATE KEY UPDATE
   password = VALUES(password),
   status = VALUES(status),

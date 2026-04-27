@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 系统角色转换器
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface RoleConverter {
 
     RoleConverter INSTANCE = Mappers.getMapper(RoleConverter.class);

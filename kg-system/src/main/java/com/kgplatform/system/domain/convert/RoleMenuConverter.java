@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 角色菜单关系转换器
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface RoleMenuConverter {
 
     RoleMenuConverter INSTANCE = Mappers.getMapper(RoleMenuConverter.class);

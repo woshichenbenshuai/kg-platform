@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 系统用户转换器
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserConverter {
 
     UserConverter INSTANCE = Mappers.getMapper(UserConverter.class);

@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author kg_chen
  * @since 2026-04-22 18:50:54
  */
-@MapperScan("com.kgplatform.system")
+@MapperScan("com.kgplatform.system.mapper")
 @SpringBootApplication(scanBasePackages = "com.kgplatform")
 public class KgSystemApplication {
 
