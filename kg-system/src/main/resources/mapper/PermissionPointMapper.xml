@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgplatform.system.mapper.PermissionPointMapper">
+    <!--@Table sys_permission_point-->
+    <resultMap id="BaseResultMap" type="com.kgplatform.system.domain.dto.PermissionPointDto">
+        <id column="id" property="id"/>
+        <result column="permission_code" property="permissionCode"/>
+        <result column="permission_name" property="permissionName"/>
+        <result column="permission_type" property="permissionType"/>
+        <result column="permission_scope" property="permissionScope"/>
+        <result column="bind_menu_id" property="bindMenuId"/>
+        <result column="api_path" property="apiPath"/>
+        <result column="api_method" property="apiMethod"/>
+        <result column="remarks" property="remarks"/>
+        <result column="status" property="status"/>
+        <result column="delete_status" property="deleteStatus"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, permission_code, permission_name, permission_type, permission_scope, bind_menu_id, api_path, api_method, remarks, status, delete_status, create_by, create_time, last_modified_by, last_modified_time
+    </sql>
+
+    <select id="selectPageList" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM sys_permission_point
+        <where>
+            1=1
+            AND delete_status = 0
+            <if test="null != vo.permissionName and '' != vo.permissionName">
+                AND permission_name LIKE CONCAT('%', #{vo.permissionName}, '%')
+            </if>
+            <if test="null != vo.permissionCode and '' != vo.permissionCode">
+                AND permission_code = #{vo.permissionCode}
+            </if>
+            <if test="null != vo.permissionType and '' != vo.permissionType">
+                AND permission_type = #{vo.permissionType}
+            </if>
+            <if test="null != vo.permissionScope and '' != vo.permissionScope">
+                AND permission_scope = #{vo.permissionScope}
+            </if>
+            <if test="null != vo.status">
+                AND status = #{vo.status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+</mapper>
+

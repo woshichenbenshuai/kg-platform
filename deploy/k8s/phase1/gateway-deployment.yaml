@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kg-gateway
+  namespace: kg-platform
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kg-gateway
+  template:
+    metadata:
+      labels:
+        app: kg-gateway
+    spec:
+      containers:
+        - name: kg-gateway
+          image: your-registry/kg-gateway:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: KG_AUTH_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: kg-platform-config
+                  key: KG_AUTH_URI
+            - name: KG_SYSTEM_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: kg-platform-config
+                  key: KG_SYSTEM_URI
+            - name: KG_KINDER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: kg-platform-config
+                  key: KG_KINDER_URI
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi

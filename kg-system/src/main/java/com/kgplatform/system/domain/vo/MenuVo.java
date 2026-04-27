@@ -1,0 +1,117 @@
+package com.kgplatform.system.domain.vo;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import com.kgplatform.common.web.core.BaseVo;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
+import lombok.experimental.Accessors;
+
+import javax.validation.constraints.Size;
+
+/**
+ * 系统菜单
+ * <p>
+ * Menu表入参类
+ *
+ * @author kg_chen
+ * @since 2026-04-23 22:30:00
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Accessors(chain = true)
+@ToString(callSuper = true)
+@Schema(description = "系统菜单")
+@EqualsAndHashCode(callSuper = true)
+public class MenuVo extends BaseVo {
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long id;
+
+    /**
+     * 菜单编码
+     */
+    @Schema(description = "菜单编码")
+    @Size(max = 100, message = "菜单编码字段过长")
+    private String menuCode;
+
+    /**
+     * 菜单名称
+     */
+    @Schema(description = "菜单名称")
+    @Size(max = 100, message = "菜单名称字段过长")
+    private String menuName;
+
+    /**
+     * 菜单范围
+     */
+    @Schema(description = "菜单范围")
+    @Size(max = 20, message = "菜单范围字段过长")
+    private String menuScope;
+
+    /**
+     * 父级菜单id
+     */
+    @Schema(description = "父级菜单id")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long parentId;
+
+    /**
+     * 路由路径
+     */
+    @Schema(description = "路由路径")
+    @Size(max = 255, message = "路由路径字段过长")
+    private String routePath;
+
+    /**
+     * 组件路径
+     */
+    @Schema(description = "组件路径")
+    @Size(max = 255, message = "组件路径字段过长")
+    private String componentPath;
+
+    /**
+     * 图标
+     */
+    @Schema(description = "图标")
+    @Size(max = 100, message = "图标字段过长")
+    private String icon;
+
+    /**
+     * 是否显示 1显示 0隐藏
+     */
+    @Schema(description = "是否显示 1显示 0隐藏")
+    private Boolean visible;
+
+    /**
+     * 是否缓存 1缓存 0不缓存
+     */
+    @Schema(description = "是否缓存 1缓存 0不缓存")
+    private Boolean keepAlive;
+
+    /**
+     * 排序
+     */
+    @Schema(description = "排序")
+    private Integer sortNo;
+
+    /**
+     * 备注
+     */
+    @Schema(description = "备注")
+    @Size(max = 255, message = "备注字段过长")
+    private String remarks;
+
+    /**
+     * 状态 1启用 0禁用
+     */
+    @Schema(description = "状态 1启用 0禁用")
+    private Boolean status;
+
+    /**
+     * 是否删除 1删除  0未删除
+     */
+    @Schema(description = "是否删除 1删除  0未删除")
+    private Boolean deleteStatus;
+}

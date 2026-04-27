@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgplatform.system.mapper.DictTypeMapper">
+    <!--@Table dict_type-->
+    <resultMap id="BaseResultMap" type="com.kgplatform.system.domain.dto.DictTypeDto">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="remarks" property="remarks"/>
+        <result column="status" property="status"/>
+        <result column="delete_status" property="deleteStatus"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, `name`, code, remarks, status, delete_status, create_by, create_time, last_modified_by, last_modified_time
+    </sql>
+
+    <select id="selectPageList" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM dict_type
+        <where>
+            1=1
+            AND status = 1
+            AND delete_status = 0
+            <if test="null != vo.name and '' != vo.name">
+                AND `name` LIKE CONCAT('%', #{vo.name}, '%')
+            </if>
+            <if test="null != vo.code and '' != vo.code">
+                AND code = #{vo.code}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+</mapper>
+

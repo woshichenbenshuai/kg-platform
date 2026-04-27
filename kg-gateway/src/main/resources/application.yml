@@ -1,0 +1,40 @@
+server:
+  port: 8080
+  shutdown: graceful
+
+spring:
+  application:
+    name: kg-gateway
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  cloud:
+    gateway:
+      routes:
+        - id: auth-route
+          uri: ${KG_AUTH_URI:http://127.0.0.1:8081}
+          predicates:
+            - Path=/auth/**
+        - id: system-route
+          uri: ${KG_SYSTEM_URI:http://127.0.0.1:8082}
+          predicates:
+            - Path=/system/**
+        - id: kinder-route
+          uri: ${KG_KINDER_URI:http://127.0.0.1:8083}
+          predicates:
+            - Path=/kinder/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true

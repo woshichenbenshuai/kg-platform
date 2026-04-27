@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kg-auth
+  namespace: kg-platform
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kg-auth
+  template:
+    metadata:
+      labels:
+        app: kg-auth
+    spec:
+      containers:
+        - name: kg-auth
+          image: your-registry/kg-auth:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+          env:
+            - name: MYSQL_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: kg-platform-config
+                  key: MYSQL_URL
+            - name: MYSQL_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: kg-platform-config
+                  key: MYSQL_USERNAME
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kg-platform-secret
+                  key: MYSQL_PASSWORD
+            - name: KG_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: kg-platform-secret
+                  key: KG_JWT_SECRET
+            - name: KG_JWT_EXPIRE_SECONDS
+              valueFrom:
+                configMapKeyRef:
+                  name: kg-platform-config
+                  key: KG_JWT_EXPIRE_SECONDS
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 768Mi

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kg-platform-config
+  namespace: kg-platform
+data:
+  MYSQL_URL: jdbc:mysql://mysql:3306/kg_platform?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+  MYSQL_USERNAME: root
+  KG_JWT_EXPIRE_SECONDS: "86400"
+  KG_AUTH_URI: http://kg-auth:8081
+  KG_SYSTEM_URI: http://kg-system:8082
+  KG_KINDER_URI: http://kg-business-kinder:8083

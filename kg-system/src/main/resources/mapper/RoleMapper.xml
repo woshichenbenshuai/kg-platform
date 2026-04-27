@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgplatform.system.mapper.RoleMapper">
+    <!--@Table sys_role-->
+    <resultMap id="BaseResultMap" type="com.kgplatform.system.domain.dto.RoleDto">
+        <id column="id" property="id"/>
+        <result column="role_code" property="roleCode"/>
+        <result column="role_name" property="roleName"/>
+        <result column="role_scope" property="roleScope"/>
+        <result column="remarks" property="remarks"/>
+        <result column="status" property="status"/>
+        <result column="delete_status" property="deleteStatus"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, role_code, role_name, role_scope, remarks, status, delete_status, create_by, create_time, last_modified_by, last_modified_time
+    </sql>
+
+    <select id="selectPageList" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM sys_role
+        <where>
+            1=1
+            AND delete_status = 0
+            <if test="null != vo.roleName and '' != vo.roleName">
+                AND role_name LIKE CONCAT('%', #{vo.roleName}, '%')
+            </if>
+            <if test="null != vo.roleCode and '' != vo.roleCode">
+                AND role_code = #{vo.roleCode}
+            </if>
+            <if test="null != vo.roleScope and '' != vo.roleScope">
+                AND role_scope = #{vo.roleScope}
+            </if>
+            <if test="null != vo.status">
+                AND status = #{vo.status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+</mapper>
+
