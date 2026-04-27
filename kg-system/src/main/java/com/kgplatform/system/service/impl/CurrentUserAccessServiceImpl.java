@@ -1,0 +1,169 @@
+package com.kgplatform.system.service.impl;
+
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.kgplatform.common.web.exception.Asserts;
+import com.kgplatform.system.domain.convert.MenuConverter;
+import com.kgplatform.system.domain.dto.CurrentUserAccessDto;
+import com.kgplatform.system.domain.dto.MenuDto;
+import com.kgplatform.system.domain.po.Menu;
+import com.kgplatform.system.domain.po.Role;
+import com.kgplatform.system.domain.po.RoleMenu;
+import com.kgplatform.system.domain.po.User;
+import com.kgplatform.system.domain.po.UserRole;
+import com.kgplatform.system.domain.po.UserTenant;
+import com.kgplatform.system.service.ICurrentUserAccessService;
+import com.kgplatform.system.service.IMenuService;
+import com.kgplatform.system.service.IRoleMenuService;
+import com.kgplatform.system.service.IRoleService;
+import com.kgplatform.system.service.IUserRoleService;
+import com.kgplatform.system.service.IUserService;
+import com.kgplatform.system.service.IUserTenantService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+@Service("currentUserAccessService")
+@Transactional(rollbackFor = Exception.class, readOnly = true)
+public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
+
+    private final IUserService userService;
+    private final IUserTenantService userTenantService;
+    private final IUserRoleService userRoleService;
+    private final IRoleService roleService;
+    private final IRoleMenuService roleMenuService;
+    private final IMenuService menuService;
+
+    public CurrentUserAccessServiceImpl(IUserService userService,
+                                        IUserTenantService userTenantService,
+                                        IUserRoleService userRoleService,
+                                        IRoleService roleService,
+                                        IRoleMenuService roleMenuService,
+                                        IMenuService menuService) {
+        this.userService = userService;
+        this.userTenantService = userTenantService;
+        this.userRoleService = userRoleService;
+        this.roleService = roleService;
+        this.roleMenuService = roleMenuService;
+        this.menuService = menuService;
+    }
+
+    @Override
+    public CurrentUserAccessDto getCurrentUserAccess(Long userId) {
+        Asserts.notNull(userId, "User id can not be null");
+
+        User user = userService.getById(userId);
+        Asserts.notNull(user, "User does not exist");
+        Asserts.isTrue(Boolean.FALSE.equals(user.getDeleteStatus()), "User does not exist");
+        Asserts.isTrue(Integer.valueOf(1).equals(user.getStatus()), "User is disabled");
+
+        UserTenant userTenant = getCurrentUserTenant(userId);
+        List<Role> roles = getCurrentRoles(userId);
+        List<String> roleCodes = roles.stream()
+                .map(Role::getRoleCode)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        List<String> roleNames = roles.stream()
+                .map(Role::getRoleName)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        List<MenuDto> menus = getCurrentMenus(roles);
+
+        CurrentUserAccessDto dto = new CurrentUserAccessDto();
+        dto.setUserId(userId);
+        dto.setUsername(user.getUsername());
+        dto.setTenantId(userTenant.getTenantId());
+        dto.setRoleCodes(roleCodes);
+        dto.setRoleNames(roleNames);
+        dto.setMenus(menus);
+        return dto;
+    }
+
+    private UserTenant getCurrentUserTenant(Long userId) {
+        List<UserTenant> userTenants = userTenantService.list(Wrappers.<UserTenant>lambdaQuery()
+                .eq(UserTenant::getUserId, userId)
+                .eq(UserTenant::getDeleteStatus, Boolean.FALSE)
+                .eq(UserTenant::getStatus, Boolean.TRUE)
+                .orderByDesc(UserTenant::getDefaultFlag)
+                .orderByAsc(UserTenant::getId));
+        Asserts.isTrue(!userTenants.isEmpty(), "Current user has no active tenant binding");
+        return userTenants.get(0);
+    }
+
+    private List<Role> getCurrentRoles(Long userId) {
+        List<UserRole> userRoles = userRoleService.list(Wrappers.<UserRole>lambdaQuery()
+                .eq(UserRole::getUserId, userId)
+                .eq(UserRole::getDeleteStatus, Boolean.FALSE)
+                .eq(UserRole::getStatus, Boolean.TRUE));
+        if (userRoles.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Long> roleIds = userRoles.stream()
+                .map(UserRole::getRoleId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        if (roleIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return roleService.list(Wrappers.<Role>lambdaQuery()
+                        .in(Role::getId, roleIds)
+                        .eq(Role::getDeleteStatus, Boolean.FALSE)
+                        .eq(Role::getStatus, Boolean.TRUE)
+                        .orderByAsc(Role::getId))
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    private List<MenuDto> getCurrentMenus(List<Role> roles) {
+        if (roles.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Long> roleIds = roles.stream()
+                .map(Role::getId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        if (roleIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<RoleMenu> roleMenus = roleMenuService.list(Wrappers.<RoleMenu>lambdaQuery()
+                .in(RoleMenu::getRoleId, roleIds)
+                .eq(RoleMenu::getDeleteStatus, Boolean.FALSE)
+                .eq(RoleMenu::getStatus, Boolean.TRUE));
+        if (roleMenus.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Long> menuIds = roleMenus.stream()
+                .map(RoleMenu::getMenuId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        if (menuIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return MenuConverter.INSTANCE.domains2Dtos(menuService.list(Wrappers.<Menu>lambdaQuery()
+                        .in(Menu::getId, menuIds)
+                        .eq(Menu::getDeleteStatus, Boolean.FALSE)
+                        .eq(Menu::getStatus, Boolean.TRUE)
+                        .orderByAsc(Menu::getSortNo)
+                        .orderByAsc(Menu::getId)))
+                .stream()
+                .sorted(Comparator.comparing(MenuDto::getSortNo, Comparator.nullsLast(Integer::compareTo))
+                        .thenComparing(MenuDto::getId, Comparator.nullsLast(Long::compareTo)))
+                .collect(Collectors.toList());
+    }
+}

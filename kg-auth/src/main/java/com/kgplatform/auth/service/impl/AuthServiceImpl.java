@@ -9,37 +9,34 @@ import com.kgplatform.auth.mapper.AuthUserMapper;
 import com.kgplatform.auth.service.AuthService;
 import com.kgplatform.common.security.jwt.JwtUtils;
 import com.kgplatform.common.web.exception.Asserts;
-import com.kgplatform.system.domain.dto.CurrentUserPermissionDto;
-import com.kgplatform.system.service.IPermissionService;
+import com.kgplatform.system.domain.dto.CurrentUserAccessDto;
+import com.kgplatform.system.service.ICurrentUserAccessService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-/**
- * 认证服务实现
- */
 @Service
 public class AuthServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> implements AuthService {
 
     private final AuthUserMapper authUserMapper;
     private final JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
-    private final IPermissionService permissionService;
+    private final ICurrentUserAccessService currentUserAccessService;
 
     public AuthServiceImpl(AuthUserMapper authUserMapper,
                            JwtUtils jwtUtils,
                            PasswordEncoder passwordEncoder,
-                           IPermissionService permissionService) {
+                           ICurrentUserAccessService currentUserAccessService) {
         this.authUserMapper = authUserMapper;
         this.jwtUtils = jwtUtils;
         this.passwordEncoder = passwordEncoder;
-        this.permissionService = permissionService;
+        this.currentUserAccessService = currentUserAccessService;
     }
 
     @Override
     public LoginDto login(LoginVo vo) {
-        Asserts.notNull(vo, "登录参数不能为空");
-        Asserts.notBlank(vo.getUsername(), "用户名不能为空");
-        Asserts.notBlank(vo.getPassword(), "密码不能为空");
+        Asserts.notNull(vo, "Login payload can not be null");
+        Asserts.notBlank(vo.getUsername(), "Username can not be blank");
+        Asserts.notBlank(vo.getPassword(), "Password can not be blank");
 
         AuthUser authUser = authUserMapper.selectByUsername(vo.getUsername());
         boolean invalid = authUser == null
@@ -50,26 +47,24 @@ public class AuthServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> imple
                 || authUser.getPassword() == null
                 || authUser.getPassword().isBlank()
                 || !passwordEncoder.matches(vo.getPassword(), authUser.getPassword());
-        Asserts.isTrue(!invalid, "用户名或密码错误");
+        Asserts.isTrue(!invalid, "Username or password is invalid");
 
         return new LoginDto(jwtUtils.createToken(authUser.getId(), authUser.getUsername()));
     }
 
     @Override
     public CurrentUserDto currentUser(Long currentUserId, String currentUsername) {
-        Asserts.notNull(currentUserId, "当前登录用户主键不能为空");
-        Asserts.notBlank(currentUsername, "当前登录用户名不能为空");
+        Asserts.notNull(currentUserId, "Current user id can not be null");
+        Asserts.notBlank(currentUsername, "Current username can not be blank");
 
-        CurrentUserPermissionDto permissionDto = permissionService.getCurrentUserPermission(currentUserId);
+        CurrentUserAccessDto accessDto = currentUserAccessService.getCurrentUserAccess(currentUserId);
         CurrentUserDto currentUserDto = new CurrentUserDto();
         currentUserDto.setUserId(currentUserId);
         currentUserDto.setUsername(currentUsername);
-        currentUserDto.setTenantId(permissionDto.getTenantId());
-        currentUserDto.setRoleCodes(permissionDto.getRoleCodes());
-        currentUserDto.setRoleNames(permissionDto.getRoleNames());
-        currentUserDto.setMenus(permissionDto.getMenus());
-        currentUserDto.setPermissionCodes(permissionDto.getPermissionCodes());
-        currentUserDto.setPermissionPoints(permissionDto.getPermissionPoints());
+        currentUserDto.setTenantId(accessDto.getTenantId());
+        currentUserDto.setRoleCodes(accessDto.getRoleCodes());
+        currentUserDto.setRoleNames(accessDto.getRoleNames());
+        currentUserDto.setMenus(accessDto.getMenus());
         return currentUserDto;
     }
 }

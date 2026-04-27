@@ -20,8 +20,8 @@ export const routes: RouteRecordRaw[] = [
         component: DashboardView
       },
       {
-        path: 'system/role-permissions',
-        name: 'role-permissions',
+        path: 'system/role-menus',
+        name: 'role-menus',
         component: RolePermissionView
       }
     ]
