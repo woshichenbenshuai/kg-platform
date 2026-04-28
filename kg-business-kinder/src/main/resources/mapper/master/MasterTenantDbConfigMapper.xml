@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgplatform.business.kinder.mapper.master.MasterTenantDbConfigMapper">
+    <resultMap id="TenantDataSourceConfigResultMap" type="com.kgplatform.business.kinder.client.dto.TenantDataSourceConfigDto">
+        <result column="tenant_id" property="tenantId"/>
+        <result column="db_host" property="dbHost"/>
+        <result column="db_port" property="dbPort"/>
+        <result column="db_name" property="dbName"/>
+        <result column="db_username" property="dbUsername"/>
+        <result column="db_password_encrypted" property="dbPasswordEncrypted"/>
+        <result column="jdbc_params" property="jdbcParams"/>
+    </resultMap>
+
+    <select id="selectEnabledByTenantId" resultMap="TenantDataSourceConfigResultMap">
+        SELECT tenant_id, db_host, db_port, db_name, db_username, db_password_encrypted, jdbc_params
+        FROM tenant_db_config
+        WHERE tenant_id = #{tenantId}
+          AND delete_status = 0
+          AND status = 1
+        LIMIT 1
+    </select>
+</mapper>

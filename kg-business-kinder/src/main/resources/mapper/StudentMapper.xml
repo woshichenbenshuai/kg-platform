@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgplatform.business.kinder.mapper.StudentMapper">
+    <resultMap id="BaseResultMap" type="com.kgplatform.business.kinder.domain.dto.StudentDto">
+        <id column="id" property="id"/>
+        <result column="student_no" property="studentNo"/>
+        <result column="student_name" property="studentName"/>
+        <result column="gender" property="gender"/>
+        <result column="birthday" property="birthday"/>
+        <result column="status" property="status"/>
+        <result column="delete_status" property="deleteStatus"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, student_no, student_name, gender, birthday, status, delete_status, create_by, create_time, last_modified_by, last_modified_time
+    </sql>
+
+    <select id="selectPageList" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM student
+        <where>
+            1=1
+            AND delete_status = 0
+            <if test="null != vo.studentNo and '' != vo.studentNo">
+                AND student_no = #{vo.studentNo}
+            </if>
+            <if test="null != vo.studentName and '' != vo.studentName">
+                AND student_name LIKE CONCAT('%', #{vo.studentName}, '%')
+            </if>
+            <if test="null != vo.status">
+                AND status = #{vo.status}
+            </if>
+        </where>
+        ORDER BY create_time DESC, id ASC
+    </select>
+
+    <select id="selectCurrentDatabase" resultType="java.lang.String">
+        SELECT DATABASE()
+    </select>
+</mapper>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kgplatform.business.kinder.mapper.master.MasterUserTenantMapper">
+    <select id="selectDefaultTenantIdByUserId" resultType="java.lang.Long">
+        SELECT tenant_id
+        FROM sys_user_tenant
+        WHERE user_id = #{userId}
+          AND delete_status = 0
+          AND status = 1
+        ORDER BY default_flag DESC, id ASC
+        LIMIT 1
+    </select>
+</mapper>
