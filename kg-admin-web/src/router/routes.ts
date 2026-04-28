@@ -20,9 +20,28 @@ export const routes: RouteRecordRaw[] = [
         component: DashboardView
       },
       {
+        path: 'system',
+        redirect: '/system/users'
+      },
+      {
         path: 'system/role-menus',
         name: 'role-menus',
         component: RolePermissionView
+      },
+      {
+        path: 'system/users',
+        name: 'system-users',
+        component: () => import('@/views/system/user/UserView.vue')
+      },
+      {
+        path: 'system/menus',
+        name: 'system-menus',
+        component: () => import('@/views/system/menu/MenuView.vue')
+      },
+      {
+        path: 'system/dicts',
+        name: 'system-dicts',
+        component: () => import('@/views/system/dict/DictView.vue')
       }
     ]
   }

@@ -13,7 +13,7 @@ export const usePermissionStore = defineStore('permission', {
       this.tenantId = payload.tenantId
       this.roleCodes = payload.roleCodes
       this.roleNames = payload.roleNames
-      this.menus = payload.menus
+      this.menus = payload.menus || []
     },
     clearPermission() {
       this.tenantId = null

@@ -6,9 +6,9 @@ import com.kgplatform.system.domain.dto.RoleMenuDto;
 import com.kgplatform.system.domain.po.RoleMenu;
 import com.kgplatform.system.domain.vo.RoleMenuVo;
 /**
- * è§è²èåå³ç³» Service æ¥å£
+ * 角色菜单关系 Service 接口
  * <p>
- * IRoleMenuService Service æ¥å£
+ * IRoleMenuService Service 接口
  *
  * @author kg_chen
  * @since 2026-04-27 17:41:45

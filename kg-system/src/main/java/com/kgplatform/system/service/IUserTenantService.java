@@ -6,9 +6,9 @@ import com.kgplatform.system.domain.dto.UserTenantDto;
 import com.kgplatform.system.domain.po.UserTenant;
 import com.kgplatform.system.domain.vo.UserTenantVo;
 /**
- * ç¨æ·ç§æ·å³ç³» Service æ¥å£
+ * 用户租户关系 Service 接口
  * <p>
- * IUserTenantService Service æ¥å£
+ * IUserTenantService Service 接口
  *
  * @author kg_chen
  * @since 2026-04-27 17:41:45

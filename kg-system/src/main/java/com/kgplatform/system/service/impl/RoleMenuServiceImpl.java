@@ -13,9 +13,9 @@ import com.kgplatform.system.service.IRoleMenuService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 /**
- * è§è²èåå³ç³» Service å®ç°ç±»
+ * 角色菜单关系 Service 实现类
  * <p>
- * RoleMenuServiceImpl Service å®ç°ç±»
+ * RoleMenuServiceImpl Service 实现类
  *
  * @author kg_chen
  * @since 2026-04-27 17:41:45

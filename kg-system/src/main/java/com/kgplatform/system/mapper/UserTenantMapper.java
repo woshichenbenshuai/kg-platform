@@ -9,10 +9,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 /**
- * ç¨æ·ç§æ·å
-³ç³» Mapper æ¥å£
+ * 用户租户关系 Mapper 接口
  * <p>
- * UserTenantMapper Mapper æ¥å£
+ * UserTenantMapper Mapper 接口
  *
  * @author kg_chen
  * @since 2026-04-27 17:41:45
@@ -24,7 +23,6 @@ public interface UserTenantMapper extends BaseMapper<UserTenant> {
 
     /**
      * 分页查询用户租户关系
-Â³Ã§Â³Â»
      *
      * @param page 分页参数
      * @param vo 查询条件

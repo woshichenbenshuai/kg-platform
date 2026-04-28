@@ -13,9 +13,9 @@ import com.kgplatform.system.service.IUserTenantService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 /**
- * ç¨æ·ç§æ·å³ç³» Service å®ç°ç±»
+ * 用户租户关系 Service 实现类
  * <p>
- * UserTenantServiceImpl Service å®ç°ç±»
+ * UserTenantServiceImpl Service 实现类
  *
  * @author kg_chen
  * @since 2026-04-27 17:41:45

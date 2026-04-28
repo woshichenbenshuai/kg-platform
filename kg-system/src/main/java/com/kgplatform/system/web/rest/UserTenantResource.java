@@ -18,10 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 /**
- * ç¨æ·ç§æ·å
-³ç³»æ§å¶å±
+ * 用户租户关系控制层
  * <p>
- * UserTenantResourceæ§å¶å±
+ * UserTenantResource控制层
  *
  * @author kg_chen
  * @since 2026-04-27 17:41:45

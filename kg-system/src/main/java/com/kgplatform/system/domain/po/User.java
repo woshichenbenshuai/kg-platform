@@ -39,6 +39,22 @@ public class User extends BaseAuditingEntity<Long> implements Serializable {
     private String username;
 
     /**
+     * 昵称
+     */
+    @Schema(description = "昵称")
+    @TableField(value = "nickname")
+    @Size(max = 100, message = "昵称字段过长")
+    private String nickname;
+
+    /**
+     * 手机号
+     */
+    @Schema(description = "手机号")
+    @TableField(value = "phone")
+    @Size(max = 20, message = "手机号字段过长")
+    private String phone;
+
+    /**
      * 登录密码
      */
     @Schema(description = "登录密码")

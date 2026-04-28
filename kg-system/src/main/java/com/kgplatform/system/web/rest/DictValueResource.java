@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 /**
- * ç³»ç»å­å
-¸æ°æ®æ§å¶å±
+ * 系统字典数据控制层
  * <p>
- * DictValueResourceæ§å¶å±
+ * DictValueResource控制层
  *
  * @author kg_chen
  * @since 2026-04-27 17:41:45

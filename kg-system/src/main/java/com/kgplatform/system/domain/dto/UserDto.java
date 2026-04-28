@@ -46,6 +46,18 @@ public class UserDto implements Serializable {
     private String username;
 
     /**
+     * 昵称
+     */
+    @Schema(description = "昵称")
+    private String nickname;
+
+    /**
+     * 手机号
+     */
+    @Schema(description = "手机号")
+    private String phone;
+
+    /**
      * 状态 1启用 0禁用
      */
     @Schema(description = "状态 1启用 0禁用")

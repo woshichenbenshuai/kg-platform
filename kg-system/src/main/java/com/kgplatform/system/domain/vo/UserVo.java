@@ -39,6 +39,20 @@ public class UserVo extends BaseVo {
     private String username;
 
     /**
+     * 昵称
+     */
+    @Schema(description = "昵称")
+    @Size(max = 100, message = "昵称字段过长")
+    private String nickname;
+
+    /**
+     * 手机号
+     */
+    @Schema(description = "手机号")
+    @Size(max = 20, message = "手机号字段过长")
+    private String phone;
+
+    /**
      * 登录密码
      */
     @Schema(description = "登录密码")

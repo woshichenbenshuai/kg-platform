@@ -9,10 +9,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 /**
- * è§è²èåå
-³ç³» Mapper æ¥å£
+ * 角色菜单关系 Mapper 接口
  * <p>
- * RoleMenuMapper Mapper æ¥å£
+ * RoleMenuMapper Mapper 接口
  *
  * @author kg_chen
  * @since 2026-04-27 17:41:45
@@ -24,7 +23,6 @@ public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
 
     /**
      * 分页查询角色菜单关系
-Â³Ã§Â³Â»
      *
      * @param page 分页参数
      * @param vo 查询条件

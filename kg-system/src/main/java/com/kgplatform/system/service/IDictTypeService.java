@@ -6,9 +6,9 @@ import com.kgplatform.system.domain.dto.DictTypeDto;
 import com.kgplatform.system.domain.po.DictType;
 import com.kgplatform.system.domain.vo.DictTypeVo;
 /**
- * ç³»ç»å­å¸ç±»å Service æ¥å£
+ * 系统字典类型 Service 接口
  * <p>
- * IDictTypeService Service æ¥å£
+ * IDictTypeService Service 接口
  *
  * @author kg_chen
  * @since 2026-04-27 17:41:45

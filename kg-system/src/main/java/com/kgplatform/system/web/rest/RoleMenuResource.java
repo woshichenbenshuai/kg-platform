@@ -18,10 +18,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 /**
- * è§è²èåå
-³ç³»æ§å¶å±
+ * 角色菜单关系控制层
  * <p>
- * RoleMenuResourceæ§å¶å±
+ * RoleMenuResource控制层
  *
  * @author kg_chen
  * @since 2026-04-27 17:41:45
