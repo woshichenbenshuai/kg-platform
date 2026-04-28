@@ -7,6 +7,9 @@ spring:
     name: kg-business-kinder
   lifecycle:
     timeout-per-shutdown-phase: 30s
+  sql:
+    init:
+      mode: never
   datasource:
     url: ${MYSQL_URL:jdbc:mysql://127.0.0.1:3306/kg_platform?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai}
     username: ${MYSQL_USERNAME:root}
@@ -23,6 +26,10 @@ kg:
     jwt:
       secret: ${KG_JWT_SECRET}
       expire-seconds: ${KG_JWT_EXPIRE_SECONDS:86400}
+  system-client:
+    mode: ${KG_SYSTEM_CLIENT_MODE:local}
+    service-name: ${KG_SYSTEM_SERVICE_NAME:kg-system}
+    base-url: ${KG_SYSTEM_BASE_URL:http://127.0.0.1:8082}
 
 management:
   endpoints:

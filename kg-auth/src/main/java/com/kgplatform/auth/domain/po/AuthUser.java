@@ -12,12 +12,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 /**
- * AuthUser
- * <p>
- * AuthUser持久化对象
- *
- * @author kg_chen
- * @since 2026-04-22 18:50:54
+ * 认证用户
  */
 @Data
 @NoArgsConstructor
@@ -32,6 +27,10 @@ public class AuthUser extends BaseAuditingEntity<Long> {
     @TableField("username")
     @Schema(description = "登录账号")
     private String username;
+
+    @TableField("nickname")
+    @Schema(description = "昵称")
+    private String nickname;
 
     @TableField("password")
     @Schema(description = "登录密码")

@@ -9,26 +9,33 @@ const router = createRouter({
   routes
 })
 
-let initialized = false
-
 router.beforeEach(async (to) => {
-  if (to.path === '/login') {
-    return true
-  }
-
   const userStore = useUserStore()
   const permissionStore = usePermissionStore()
 
+  if (to.path === '/login') {
+    if (userStore.token) {
+      return '/'
+    }
+    return true
+  }
+
   if (!userStore.token) {
+    permissionStore.clearPermission()
     return '/login'
   }
 
-  if (!initialized) {
-    const response = await getCurrentUser()
-    const currentUser = response.data.data
-    userStore.setUser(currentUser.userId, currentUser.username)
-    permissionStore.applyCurrentUser(currentUser)
-    initialized = true
+  if (!permissionStore.initialized) {
+    try {
+      const response = await getCurrentUser()
+      const currentUser = response.data.data
+      userStore.setUser(currentUser.userId, currentUser.username)
+      permissionStore.applyCurrentUser(currentUser)
+    } catch (error) {
+      userStore.clearUser()
+      permissionStore.clearPermission()
+      return `/login?redirect=${encodeURIComponent(to.fullPath)}`
+    }
   }
 
   return true

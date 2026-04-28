@@ -3,6 +3,7 @@ import type { CurrentUserDto, MenuDto } from '@/types/auth'
 
 export const usePermissionStore = defineStore('permission', {
   state: () => ({
+    initialized: false,
     tenantId: null as number | null,
     roleCodes: [] as string[],
     roleNames: [] as string[],
@@ -10,12 +11,14 @@ export const usePermissionStore = defineStore('permission', {
   }),
   actions: {
     applyCurrentUser(payload: CurrentUserDto) {
+      this.initialized = true
       this.tenantId = payload.tenantId
       this.roleCodes = payload.roleCodes
       this.roleNames = payload.roleNames
       this.menus = payload.menus || []
     },
     clearPermission() {
+      this.initialized = false
       this.tenantId = null
       this.roleCodes = []
       this.roleNames = []

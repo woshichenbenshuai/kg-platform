@@ -9,6 +9,7 @@ import com.kgplatform.system.domain.dto.UserTenantDto;
 import com.kgplatform.system.domain.po.UserTenant;
 import com.kgplatform.system.domain.vo.UserTenantVo;
 import com.kgplatform.system.service.IUserTenantService;
+import com.kgplatform.system.web.TenantScopeHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,10 +36,14 @@ public class UserTenantResource {
 
     private final UserTenantConverter userTenantConverter;
     private final IUserTenantService userTenantService;
+    private final TenantScopeHelper tenantScopeHelper;
 
-    public UserTenantResource(IUserTenantService userTenantService, UserTenantConverter userTenantConverter) {
+    public UserTenantResource(IUserTenantService userTenantService,
+                              UserTenantConverter userTenantConverter,
+                              TenantScopeHelper tenantScopeHelper) {
         this.userTenantService = userTenantService;
         this.userTenantConverter = userTenantConverter;
+        this.tenantScopeHelper = tenantScopeHelper;
     }
 
 
@@ -56,7 +61,9 @@ public class UserTenantResource {
             @Parameter(description = "当前页码") @RequestParam(required = false, defaultValue = "0") Integer current,
             @Parameter(description = "每页条数") @RequestParam(required = false, defaultValue = "10") Integer size,
             UserTenantVo vo) {
-        return Result.ok(this.userTenantService.selectPage(current, size, vo));
+        UserTenantVo query = vo == null ? new UserTenantVo() : vo;
+        query.setBindTenantId(tenantScopeHelper.resolveTenantId(query.getBindTenantId()));
+        return Result.ok(this.userTenantService.selectPage(current, size, query));
     }
 
 
@@ -71,10 +78,11 @@ public class UserTenantResource {
     @Operation(summary = "根据用户和租户查询关系是否重复")
     public Result<List<UserTenant>> selectByUserAndTenant(
             @Parameter(description = "用户ID") @RequestParam Long userId,
-            @Parameter(description = "租户ID") @RequestParam Long tenantId) {
+            @Parameter(description = "租户ID") @RequestParam(required = false) Long tenantId) {
+        Long scopedTenantId = tenantScopeHelper.resolveTenantId(tenantId);
         return Result.ok(this.userTenantService.list(Wrappers.<UserTenant>lambdaQuery()
                 .eq(UserTenant::getUserId, userId)
-                .eq(UserTenant::getTenantId, tenantId)
+                .eq(UserTenant::getTenantId, scopedTenantId)
                 .eq(UserTenant::getStatus, Boolean.TRUE)
                 .eq(UserTenant::getDeleteStatus, Boolean.FALSE)));
     }
@@ -89,7 +97,10 @@ public class UserTenantResource {
     @GetMapping
     @Operation(summary = "根据主键查询用户租户关系")
     public Result<UserTenantDto> selectOne(@Parameter(description = "主键") @RequestParam Long id) {
-        return Result.ok(this.userTenantConverter.domain2Dto(this.userTenantService.getById(id)));
+        UserTenant entity = this.userTenantService.getById(id);
+        Asserts.notNull(entity, "用户租户关系不存在");
+        tenantScopeHelper.assertAccessible(entity.getTenantId());
+        return Result.ok(this.userTenantConverter.domain2Dto(entity));
     }
 
 
@@ -102,6 +113,7 @@ public class UserTenantResource {
     @PostMapping
     @Operation(summary = "新增用户租户关系")
     public Result<Boolean> insert(@RequestBody UserTenantVo vo) {
+        vo.setBindTenantId(tenantScopeHelper.resolveTenantId(vo.getBindTenantId()));
         return Result.ok(this.userTenantService.saveUserTenant(vo));
     }
 
@@ -115,6 +127,14 @@ public class UserTenantResource {
     @Operation(summary = "修改用户租户关系")
     public Result<Boolean> update(@RequestBody UserTenantVo vo) {
         Asserts.notNull(vo.getId(), "主键不能为空");
+        UserTenant entity = this.userTenantService.getById(vo.getId());
+        Asserts.notNull(entity, "用户租户关系不存在");
+        tenantScopeHelper.assertAccessible(entity.getTenantId());
+        if (vo.getBindTenantId() == null) {
+            vo.setBindTenantId(entity.getTenantId());
+        } else {
+            tenantScopeHelper.assertAccessible(vo.getBindTenantId());
+        }
         return Result.ok(this.userTenantService.update(vo));
     }
 
@@ -128,6 +148,9 @@ public class UserTenantResource {
     @DeleteMapping
     @Operation(summary = "删除用户租户关系")
     public Result<Boolean> delete(@Parameter(description = "主键") @RequestParam("id") Long id) {
+        UserTenant entity = this.userTenantService.getById(id);
+        Asserts.notNull(entity, "用户租户关系不存在");
+        tenantScopeHelper.assertAccessible(entity.getTenantId());
         return Result.ok(this.userTenantService.delete(id));
     }
 }

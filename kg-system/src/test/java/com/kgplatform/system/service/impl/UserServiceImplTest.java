@@ -8,8 +8,7 @@ import com.kgplatform.system.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.lang.reflect.Field;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -58,8 +57,6 @@ class UserServiceImplTest {
     }
 
     private void setBaseMapper(UserServiceImpl service, UserMapper userMapper) throws Exception {
-        Field field = service.getClass().getSuperclass().getSuperclass().getDeclaredField("baseMapper");
-        field.setAccessible(true);
-        field.set(service, userMapper);
+        ReflectionTestUtils.setField(service, "baseMapper", userMapper);
     }
 }

@@ -17,4 +17,12 @@ public interface ICurrentUserAccessService {
      * @return 当前用户访问聚合
      */
     CurrentUserAccessDto getCurrentUserAccess(Long userId);
+
+    /**
+     * 查询当前用户默认租户主键
+     *
+     * @param userId 用户主键
+     * @return 当前租户主键
+     */
+    Long getCurrentTenantId(Long userId);
 }

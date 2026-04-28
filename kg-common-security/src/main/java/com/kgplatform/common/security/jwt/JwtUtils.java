@@ -28,9 +28,15 @@ public class JwtUtils {
     }
 
     public String createToken(Long userId, String username) {
+        return createToken(userId, username, null, null);
+    }
+
+    public String createToken(Long userId, String username, String nickname, Long tenantId) {
         return Jwts.builder()
                 .subject(String.valueOf(userId))
                 .claim("username", username)
+                .claim("nickname", nickname)
+                .claim("tenantId", tenantId)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expireSeconds * 1000))
                 .signWith(secretKey)
@@ -45,6 +51,9 @@ public class JwtUtils {
                 .getPayload();
         Long userId = Long.valueOf(claims.getSubject());
         String username = claims.get("username", String.class);
-        return new LoginUser(userId, username);
+        String nickname = claims.get("nickname", String.class);
+        Object tenantIdValue = claims.get("tenantId");
+        Long tenantId = tenantIdValue == null ? null : Long.valueOf(String.valueOf(tenantIdValue));
+        return new LoginUser(userId, username, nickname, tenantId);
     }
 }

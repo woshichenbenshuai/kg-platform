@@ -24,11 +24,12 @@ ON DUPLICATE KEY UPDATE
   status = VALUES(status), delete_status = VALUES(delete_status), last_modified_by = VALUES(last_modified_by), last_modified_time = VALUES(last_modified_time);
 
 INSERT INTO sys_user (
-  id, username, password, status, delete_status,
+  id, username, nickname, password, status, delete_status,
   create_by, create_time, last_modified_by, last_modified_time
 ) VALUES
-(1, 'admin', '$2b$10$gRwApN1uS2fYcTWQ84PchOirv0A7ZD4Y9ybSnldeW1BaJZlrTO2LG', 1, b'0', 'system', NOW(), 'system', NOW())
+(1, 'admin', '平台管理员', '$2b$10$gRwApN1uS2fYcTWQ84PchOirv0A7ZD4Y9ybSnldeW1BaJZlrTO2LG', 1, b'0', 'system', NOW(), 'system', NOW())
 ON DUPLICATE KEY UPDATE
+  nickname = VALUES(nickname),
   password = VALUES(password), status = VALUES(status), delete_status = VALUES(delete_status),
   last_modified_by = VALUES(last_modified_by), last_modified_time = VALUES(last_modified_time);
 

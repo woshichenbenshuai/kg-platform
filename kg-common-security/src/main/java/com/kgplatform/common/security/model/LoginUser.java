@@ -1,22 +1,27 @@
 package com.kgplatform.common.security.model;
 
 /**
- * LoginUser
- * <p>
- * LoginUser业务类
- *
- * @author kg_chen
- * @since 2026-04-22 18:50:54
+ * 当前登录用户快照
  */
 public class LoginUser {
 
-    private Long userId;
+    private final Long userId;
 
-    private String username;
+    private final String username;
+
+    private final String nickname;
+
+    private final Long tenantId;
 
     public LoginUser(Long userId, String username) {
+        this(userId, username, null, null);
+    }
+
+    public LoginUser(Long userId, String username, String nickname, Long tenantId) {
         this.userId = userId;
         this.username = username;
+        this.nickname = nickname;
+        this.tenantId = tenantId;
     }
 
     public Long getUserId() {
@@ -25,5 +30,13 @@ public class LoginUser {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public Long getTenantId() {
+        return tenantId;
     }
 }

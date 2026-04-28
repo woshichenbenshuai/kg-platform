@@ -2,7 +2,7 @@ import http from './http'
 import type { CurrentUserDto } from '@/types/auth'
 
 interface ApiResponse<T> {
-  code: number
+  code: string
   message: string
   data: T
 }

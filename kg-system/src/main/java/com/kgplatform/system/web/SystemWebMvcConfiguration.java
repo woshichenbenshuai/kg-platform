@@ -23,6 +23,7 @@ public class SystemWebMvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(systemAuthInterceptor)
-                .addPathPatterns("/system/**");
+                .addPathPatterns("/**")
+                .excludePathPatterns("/actuator/**", "/error");
     }
 }
