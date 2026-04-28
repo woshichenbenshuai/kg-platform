@@ -40,8 +40,7 @@ public class DictTypeResource {
         this.dictTypeConverter = dictTypeConverter;
     }
 
-    @GetMapping("/pages")
-    @Operation(summary = "分页查询系统字典类型")
+
     /**
      * 分页查询系统字典类型
      *
@@ -49,6 +48,8 @@ public class DictTypeResource {
      * @param false 每页条数
      * @return 接口结果
      */
+    @GetMapping("/pages")
+    @Operation(summary = "分页查询系统字典类型")
     public Result<Page<DictTypeDto>> selectAll(
             @Parameter(description = "当前页码") @RequestParam(required = false, defaultValue = "0") Integer current,
             @Parameter(description = "每页条数") @RequestParam(required = false, defaultValue = "10") Integer size,

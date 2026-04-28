@@ -1,4 +1,4 @@
-package com.kgplatform.auth.web.rest;
+package com.kgplatform.auth.web.rest.front;
 
 import com.kgplatform.auth.domain.dto.CurrentUserDto;
 import com.kgplatform.auth.domain.dto.LoginDto;

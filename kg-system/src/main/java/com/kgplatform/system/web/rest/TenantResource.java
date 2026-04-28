@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 /**
  * 系统租户控制层
  * <p>
@@ -40,15 +41,17 @@ public class TenantResource {
         this.tenantConverter = tenantConverter;
     }
 
-    @GetMapping("/pages")
-    @Operation(summary = "分页查询系统租户")
+
     /**
      * 分页查询系统租户
      *
-     * @param false 当前页码
-     * @param false 每页条数
+     * @param current 当前页码
+     * @param size    每页条数
+     * @param vo      入参
      * @return 接口结果
      */
+    @GetMapping("/pages")
+    @Operation(summary = "分页查询系统租户")
     public Result<Page<TenantDto>> selectAll(
             @Parameter(description = "当前页码") @RequestParam(required = false, defaultValue = "0") Integer current,
             @Parameter(description = "每页条数") @RequestParam(required = false, defaultValue = "10") Integer size,
@@ -56,14 +59,15 @@ public class TenantResource {
         return Result.ok(this.tenantService.selectPage(current, size, vo));
     }
 
-    @GetMapping("/codes")
-    @Operation(summary = "根据编码查询租户是否重复")
+
     /**
      * 根据编码查询租户是否重复
      *
      * @param code 租户编码
      * @return 接口结果
      */
+    @GetMapping("/codes")
+    @Operation(summary = "根据编码查询租户是否重复")
     public Result<List<Tenant>> selectByCode(@Parameter(description = "租户编码") @RequestParam String code) {
         return Result.ok(this.tenantService.list(Wrappers.<Tenant>lambdaQuery()
                 .eq(Tenant::getTenantCode, code)
@@ -71,51 +75,55 @@ public class TenantResource {
                 .eq(Tenant::getDeleteStatus, Boolean.FALSE)));
     }
 
-    @GetMapping
-    @Operation(summary = "根据主键查询系统租户")
+
     /**
      * 根据主键查询系统租户
      *
      * @param id 主键
      * @return 接口结果
      */
+    @GetMapping
+    @Operation(summary = "根据主键查询系统租户")
     public Result<TenantDto> selectOne(@Parameter(description = "主键") @RequestParam Long id) {
         return Result.ok(this.tenantConverter.domain2Dto(this.tenantService.getById(id)));
     }
 
-    @PostMapping
-    @Operation(summary = "新增系统租户")
+
     /**
      * 新增系统租户
      *
      * @param vo vo
      * @return 接口结果
      */
+    @PostMapping
+    @Operation(summary = "新增系统租户")
     public Result<Boolean> insert(@RequestBody TenantVo vo) {
         return Result.ok(this.tenantService.saveTenant(vo));
     }
 
-    @PutMapping
-    @Operation(summary = "修改系统租户")
+
     /**
      * 修改系统租户
      *
      * @param vo vo
      * @return 接口结果
      */
+    @PutMapping
+    @Operation(summary = "修改系统租户")
     public Result<Boolean> update(@RequestBody TenantVo vo) {
         Asserts.notNull(vo.getId(), "主键不能为空");
         return Result.ok(this.tenantService.update(vo));
     }
 
-    @DeleteMapping
-    @Operation(summary = "删除系统租户")
+
     /**
      * 删除系统租户
      *
      * @param id 主键
      * @return 接口结果
      */
+    @DeleteMapping
+    @Operation(summary = "删除系统租户")
     public Result<Boolean> delete(@Parameter(description = "主键") @RequestParam("id") Long id) {
         return Result.ok(this.tenantService.delete(id));
     }
