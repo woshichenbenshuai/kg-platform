@@ -46,5 +46,32 @@
         </where>
         ORDER BY create_time DESC
     </select>
+
+    <select id="selectAllByTenantId" resultType="com.kgplatform.system.domain.po.TenantDbConfig">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM tenant_db_config
+        WHERE tenant_id = #{tenantId}
+        ORDER BY create_time DESC
+    </select>
+
+    <update id="updateProvisioningConfig">
+        UPDATE tenant_db_config
+        SET db_type = #{dbType},
+            db_host = #{dbHost},
+            db_port = #{dbPort},
+            db_name = #{dbName},
+            db_username = #{dbUsername},
+            db_password_encrypted = #{dbPasswordEncrypted},
+            jdbc_params = #{jdbcParams},
+            schema_version = #{schemaVersion},
+            db_status = #{dbStatus},
+            last_check_time = #{lastCheckTime},
+            last_check_result = #{lastCheckResult},
+            status = #{status},
+            delete_status = #{deleteStatus},
+            last_modified_time = NOW()
+        WHERE id = #{id}
+    </update>
 </mapper>
 

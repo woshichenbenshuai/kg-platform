@@ -7,6 +7,7 @@ import com.kgplatform.common.web.exception.Asserts;
 import com.kgplatform.system.domain.convert.RoleMenuConverter;
 import com.kgplatform.system.domain.dto.RoleMenuDto;
 import com.kgplatform.system.domain.po.RoleMenu;
+import com.kgplatform.system.domain.vo.RoleMenuBatchSaveVo;
 import com.kgplatform.system.domain.vo.RoleMenuVo;
 import com.kgplatform.system.service.IRoleMenuService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -103,6 +104,19 @@ public class RoleMenuResource {
     @Operation(summary = "新增角色菜单关系")
     public Result<Boolean> insert(@RequestBody RoleMenuVo vo) {
         return Result.ok(this.roleMenuService.saveRoleMenu(vo));
+    }
+
+
+    /**
+     * 批量保存角色菜单授权
+     *
+     * @param vo vo
+     * @return 接口结果
+     */
+    @PostMapping("/batch-save")
+    @Operation(summary = "批量保存角色菜单授权")
+    public Result<Boolean> batchSave(@RequestBody RoleMenuBatchSaveVo vo) {
+        return Result.ok(this.roleMenuService.saveRoleMenus(vo));
     }
 
 

@@ -7,6 +7,7 @@ import com.kgplatform.common.datasource.context.TenantContextHolder;
 import com.kgplatform.common.security.context.LoginUserContextHolder;
 import com.kgplatform.common.security.filter.JwtAuthenticationFilter;
 import com.kgplatform.common.security.jwt.JwtUtils;
+import com.kgplatform.common.security.model.LoginUser;
 import com.kgplatform.common.security.resolver.JwtLoginUserResolver;
 import com.kgplatform.common.web.exception.GlobalExceptionHandler;
 import com.kgplatform.system.service.ICurrentUserAccessService;
@@ -18,8 +19,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Objects;
+
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -74,7 +77,8 @@ class AuthCurrentUserWebTest {
         dto.setTenantId(1L);
 
         when(currentUserAccessService.getCurrentTenantId(anyLong())).thenReturn(1L);
-        when(authService.currentUser(eq(100L), eq("tester"))).thenReturn(dto);
+        when(authService.currentUser(argThat(loginUser -> matchesLoginUser(loginUser, 100L, "tester", null))))
+                .thenReturn(dto);
 
         mockMvc.perform(get("/auth/current-user").header("Authorization", "Bearer " + createValidToken()))
                 .andExpect(status().isOk())
@@ -84,10 +88,17 @@ class AuthCurrentUserWebTest {
                 .andExpect(jsonPath("$.data.tenantId").value(1));
 
         verify(currentUserAccessService).getCurrentTenantId(100L);
-        verify(authService).currentUser(100L, "tester");
+        verify(authService).currentUser(argThat(loginUser -> matchesLoginUser(loginUser, 100L, "tester", null)));
     }
 
     private String createValidToken() {
         return new JwtUtils(SECRET, 3600).createToken(100L, "tester");
+    }
+
+    private boolean matchesLoginUser(LoginUser loginUser, Long userId, String username, Long tenantId) {
+        return loginUser != null
+                && userId.equals(loginUser.getUserId())
+                && username.equals(loginUser.getUsername())
+                && Objects.equals(tenantId, loginUser.getTenantId());
     }
 }

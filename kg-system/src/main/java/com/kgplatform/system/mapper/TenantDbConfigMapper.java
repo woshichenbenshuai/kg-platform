@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * 租户数据库配置
  * <p>
@@ -30,4 +32,20 @@ public interface TenantDbConfigMapper extends BaseMapper<TenantDbConfig> {
      */
     Page<TenantDbConfigDto> selectPageList(Page<TenantDbConfigDto> page,
                                            @Param("vo") TenantDbConfigVo vo);
+
+    /**
+     * 按租户查询数据库配置，包含逻辑删除数据。
+     *
+     * @param tenantId 租户主键
+     * @return 配置列表
+     */
+    List<TenantDbConfig> selectAllByTenantId(@Param("tenantId") Long tenantId);
+
+    /**
+     * 更新自动开库配置，绕过逻辑删除过滤。
+     *
+     * @param entity 配置
+     * @return 更新行数
+     */
+    int updateProvisioningConfig(TenantDbConfig entity);
 }

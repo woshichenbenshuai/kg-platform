@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS dict_value (
 CREATE TABLE IF NOT EXISTS sys_user (
   id BIGINT(20) NOT NULL COMMENT 'Primary key',
   username VARCHAR(100) NOT NULL COMMENT 'Login username',
+  nickname VARCHAR(100) DEFAULT NULL COMMENT 'Display nickname',
+  phone VARCHAR(20) DEFAULT NULL COMMENT 'Phone number',
   password VARCHAR(255) NOT NULL COMMENT 'Login password',
   status TINYINT(1) NOT NULL DEFAULT 1 COMMENT 'Status',
   delete_status BIT(1) NOT NULL DEFAULT b'0' COMMENT 'Logical delete',

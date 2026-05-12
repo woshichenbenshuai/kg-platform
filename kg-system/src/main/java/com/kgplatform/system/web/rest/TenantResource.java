@@ -103,6 +103,19 @@ public class TenantResource {
 
 
     /**
+     * 重建幼儿园业务库
+     *
+     * @param id 租户主键
+     * @return 接口结果
+     */
+    @PostMapping("/{id}/database/rebuild")
+    @Operation(summary = "重建幼儿园业务库")
+    public Result<String> rebuildDatabase(@Parameter(description = "主键") @PathVariable Long id) {
+        return Result.ok(this.tenantService.rebuildTenantDatabase(id));
+    }
+
+
+    /**
      * 修改系统租户
      *
      * @param vo vo

@@ -18,10 +18,14 @@ spring:
           uri: ${KG_SYSTEM_URI:http://127.0.0.1:8082}
           predicates:
             - Path=/system/**
+          filters:
+            - StripPrefix=1
         - id: kinder-route
           uri: ${KG_KINDER_URI:http://127.0.0.1:8083}
           predicates:
             - Path=/kinder/**
+          filters:
+            - StripPrefix=1
 
 management:
   endpoints:

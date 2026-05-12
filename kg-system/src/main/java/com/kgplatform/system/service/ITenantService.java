@@ -20,6 +20,14 @@ public interface ITenantService extends IService<Tenant> {
 
     boolean saveTenant(TenantVo vo);
 
+    /**
+     * 重建幼儿园业务库。
+     *
+     * @param id 租户主键
+     * @return 数据库名称
+     */
+    String rebuildTenantDatabase(Long id);
+
     Boolean update(TenantVo vo);
 
     boolean delete(Long id);

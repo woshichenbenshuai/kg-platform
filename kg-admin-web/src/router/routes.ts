@@ -24,6 +24,15 @@ export const routes: RouteRecordRaw[] = [
         redirect: '/system/users'
       },
       {
+        path: 'platform',
+        redirect: '/platform/tenants'
+      },
+      {
+        path: 'platform/tenants',
+        name: 'platform-tenants',
+        component: () => import('@/views/platform/TenantConfigView.vue')
+      },
+      {
         path: 'system/role-menus',
         name: 'role-menus',
         component: RolePermissionView

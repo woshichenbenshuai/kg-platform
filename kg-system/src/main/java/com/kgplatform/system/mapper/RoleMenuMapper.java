@@ -8,6 +8,8 @@ import com.kgplatform.system.domain.vo.RoleMenuVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 /**
  * 角色菜单关系 Mapper 接口
  * <p>
@@ -29,4 +31,24 @@ public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
      * @return 分页结果
      */
     Page<RoleMenuDto> selectPageList(Page<RoleMenuDto> page, @Param("vo") RoleMenuVo vo);
+
+    /**
+     * 查询角色下所有菜单关系，包含逻辑删除数据，用于批量授权时恢复历史关系。
+     *
+     * @param roleId 角色主键
+     * @return 角色菜单关系
+     */
+    List<RoleMenu> selectAllByRoleId(@Param("roleId") Long roleId);
+
+    /**
+     * 更新关系状态，绕过逻辑删除过滤，用于批量授权恢复已删除关系。
+     *
+     * @param id 主键
+     * @param status 状态
+     * @param deleteStatus 删除状态
+     * @return 更新行数
+     */
+    int updateRelationState(@Param("id") Long id,
+                            @Param("status") Boolean status,
+                            @Param("deleteStatus") Boolean deleteStatus);
 }

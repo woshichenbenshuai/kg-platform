@@ -34,5 +34,20 @@
         </where>
         ORDER BY create_time DESC
     </select>
+
+    <select id="selectAllByRoleId" resultType="com.kgplatform.system.domain.po.RoleMenu">
+        SELECT
+            <include refid="Base_Column_List"/>
+        FROM role_menu
+        WHERE role_id = #{roleId}
+    </select>
+
+    <update id="updateRelationState">
+        UPDATE role_menu
+        SET status = #{status},
+            delete_status = #{deleteStatus},
+            last_modified_time = NOW()
+        WHERE id = #{id}
+    </update>
 </mapper>
 
