@@ -11,41 +11,33 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 
 /**
- * 学生查询入参
+ * 班级入参
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
 @ToString(callSuper = true)
-@Schema(description = "学生")
+@Schema(description = "班级")
 @EqualsAndHashCode(callSuper = true)
-public class StudentVo extends BaseVo {
+public class KindergartenClassVo extends BaseVo {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
 
-    @Schema(description = "班级ID")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Long classId;
+    @Schema(description = "班级编码")
+    @Size(max = 64, message = "班级编码字段过长")
+    private String classCode;
 
-    @Schema(description = "学号")
-    @Size(max = 64, message = "学号字段过长")
-    private String studentNo;
+    @Schema(description = "班级名称")
+    @Size(max = 100, message = "班级名称字段过长")
+    private String className;
 
-    @Schema(description = "学生姓名")
-    @Size(max = 100, message = "学生姓名字段过长")
-    private String studentName;
-
-    @Schema(description = "性别")
-    @Size(max = 20, message = "性别字段过长")
-    private String gender;
-
-    @Schema(description = "出生日期")
-    private LocalDate birthday;
+    @Schema(description = "年级名称")
+    @Size(max = 100, message = "年级名称字段过长")
+    private String gradeName;
 
     @Schema(description = "状态 1启用 0禁用")
     private Integer status;

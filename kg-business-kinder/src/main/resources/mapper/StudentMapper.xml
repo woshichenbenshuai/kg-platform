@@ -3,6 +3,7 @@
 <mapper namespace="com.kgplatform.business.kinder.mapper.StudentMapper">
     <resultMap id="BaseResultMap" type="com.kgplatform.business.kinder.domain.dto.StudentDto">
         <id column="id" property="id"/>
+        <result column="class_id" property="classId"/>
         <result column="student_no" property="studentNo"/>
         <result column="student_name" property="studentName"/>
         <result column="gender" property="gender"/>
@@ -13,7 +14,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, student_no, student_name, gender, birthday, status, delete_status, create_by, create_time, last_modified_by, last_modified_time
+        id, class_id, student_no, student_name, gender, birthday, status, delete_status, create_by, create_time, last_modified_by, last_modified_time
     </sql>
 
     <select id="selectPageList" resultMap="BaseResultMap">
@@ -25,6 +26,9 @@
             AND delete_status = 0
             <if test="null != vo.studentNo and '' != vo.studentNo">
                 AND student_no = #{vo.studentNo}
+            </if>
+            <if test="null != vo.classId">
+                AND class_id = #{vo.classId}
             </if>
             <if test="null != vo.studentName and '' != vo.studentName">
                 AND student_name LIKE CONCAT('%', #{vo.studentName}, '%')

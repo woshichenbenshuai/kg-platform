@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.kgplatform.common.web.core.AppConstant;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,10 +15,9 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
- * 学生返回对象
+ * 家长端孩子信息
  */
 @Data
 @NoArgsConstructor
@@ -29,15 +25,11 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @Accessors(chain = true)
 @ToString(callSuper = true)
-@Schema(description = "学生")
-public class StudentDto implements Serializable {
+@Schema(description = "家长端孩子信息")
+public class ParentChildDto implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
-
-    @Schema(description = "班级ID")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Long classId;
 
     @Schema(description = "学号")
     private String studentNo;
@@ -54,14 +46,18 @@ public class StudentDto implements Serializable {
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 
-    @Schema(description = "状态 1启用 0禁用")
-    private Integer status;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long classId;
 
-    @Schema(description = "是否删除 1删除 0未删除")
-    private Boolean deleteStatus;
+    @Schema(description = "班级名称")
+    private String className;
 
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    @JsonFormat(timezone = "GMT+8", pattern = AppConstant.FORMAT_PATTERN_DATE_TIME)
-    private LocalDateTime createTime;
+    @Schema(description = "年级名称")
+    private String gradeName;
+
+    @Schema(description = "关系类型")
+    private String relationType;
+
+    @Schema(description = "是否主联系人")
+    private Boolean primaryContact;
 }

@@ -28,6 +28,10 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 public class Student extends BaseAuditingEntity<Long> implements Serializable {
 
+    @Schema(description = "班级ID")
+    @TableField("class_id")
+    private Long classId;
+
     @Schema(description = "学号")
     @TableField("student_no")
     @Size(max = 64, message = "学号字段过长")

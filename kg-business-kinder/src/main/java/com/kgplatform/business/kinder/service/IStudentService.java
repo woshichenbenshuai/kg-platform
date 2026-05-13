@@ -16,5 +16,11 @@ public interface IStudentService extends IService<Student> {
 
     StudentDetailDto selectDetail(Long id);
 
+    boolean saveStudent(StudentVo vo);
+
+    boolean updateStudent(StudentVo vo);
+
+    boolean deleteStudent(Long id);
+
     String currentDatabase();
 }

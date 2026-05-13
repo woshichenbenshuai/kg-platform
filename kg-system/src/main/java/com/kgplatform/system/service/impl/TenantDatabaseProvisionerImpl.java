@@ -115,7 +115,7 @@ public class TenantDatabaseProvisionerImpl implements TenantDatabaseProvisioner 
         entity.setDbUsername(masterUsername);
         entity.setDbPasswordEncrypted(encryptPassword(masterPassword));
         entity.setJdbcParams(jdbcInfo.params());
-        entity.setSchemaVersion("20260512.1");
+        entity.setSchemaVersion("20260513.1");
         entity.setDbStatus("NORMAL");
         entity.setLastCheckTime(LocalDateTime.now());
         entity.setLastCheckResult("按模板重新生成业务库");
