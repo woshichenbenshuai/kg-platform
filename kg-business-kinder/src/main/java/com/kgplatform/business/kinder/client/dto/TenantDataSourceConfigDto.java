@@ -28,7 +28,5 @@ public class TenantDataSourceConfigDto implements Serializable {
 
     private String dbUsername;
 
-    private String dbPasswordEncrypted;
-
-    private String jdbcParams;
+    private String dbPassword;
 }

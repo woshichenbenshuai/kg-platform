@@ -39,7 +39,13 @@ public class TenantScopeHelper {
     }
 
     public Long resolveTenantId(Long requestTenantId) {
-        return requestTenantId != null ? requestTenantId : currentTenantId();
+        if (requestTenantId != null) {
+            return requestTenantId;
+        }
+        if (isPlatformAdmin()) {
+            return null;
+        }
+        return currentTenantId();
     }
 
     public void assertAccessible(Long resourceTenantId) {

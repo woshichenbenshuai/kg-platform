@@ -37,6 +37,8 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = Exception.class, readOnly = true)
 public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
 
+    private static final String PLATFORM_ADMIN = "PLATFORM_ADMIN";
+
     private final IUserService userService;
     private final IUserTenantService userTenantService;
     private final IUserRoleService userRoleService;
@@ -67,7 +69,6 @@ public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
         Asserts.isTrue(Boolean.FALSE.equals(user.getDeleteStatus()), "用户不存在");
         Asserts.isTrue(Integer.valueOf(1).equals(user.getStatus()), "用户已禁用");
 
-        UserTenant userTenant = getCurrentUserTenant(userId);
         List<Role> roles = getCurrentRoles(userId);
         List<String> roleCodes = roles.stream()
                 .map(Role::getRoleCode)
@@ -80,12 +81,13 @@ public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
                 .distinct()
                 .collect(Collectors.toList());
         List<MenuDto> menus = getCurrentMenus(roles);
+        Long tenantId = resolveCurrentTenantId(userId, roleCodes);
 
         CurrentUserAccessDto dto = new CurrentUserAccessDto();
         dto.setUserId(userId);
         dto.setUsername(user.getUsername());
         dto.setNickname(user.getNickname());
-        dto.setTenantId(userTenant.getTenantId());
+        dto.setTenantId(tenantId);
         dto.setRoleCodes(roleCodes);
         dto.setRoleNames(roleNames);
         dto.setMenus(menus);
@@ -95,6 +97,18 @@ public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
     @Override
     public Long getCurrentTenantId(Long userId) {
         Asserts.notNull(userId, "用户主键不能为空");
+        List<String> roleCodes = getCurrentRoles(userId).stream()
+                .map(Role::getRoleCode)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        return resolveCurrentTenantId(userId, roleCodes);
+    }
+
+    private Long resolveCurrentTenantId(Long userId, List<String> roleCodes) {
+        if (roleCodes != null && roleCodes.contains(PLATFORM_ADMIN)) {
+            return null;
+        }
         return getCurrentUserTenant(userId).getTenantId();
     }
 

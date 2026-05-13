@@ -31,16 +31,11 @@ public class TenantDbConfigDto implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long tenantId;
 
-    private String dbType;
     private String dbHost;
     private Integer dbPort;
     private String dbName;
     private String dbUsername;
-    private String jdbcParams;
-    private String schemaVersion;
-    private String dbStatus;
-    private LocalDateTime lastCheckTime;
-    private String lastCheckResult;
+    private String dbPassword;
     private Boolean status;
     private Boolean deleteStatus;
     private LocalDateTime createTime;

@@ -13,7 +13,7 @@
         </el-form-item>
       </el-form>
       <div class="btn-box">
-        <el-button class="search" @click="getList">查 询</el-button>
+        <el-button class="search" @click="getList">查询</el-button>
         <el-button class="add-btn" @click="handleCreateTenant">新增幼儿园</el-button>
       </div>
     </el-card>
@@ -70,7 +70,7 @@
       <el-form :model="tenantForm" label-position="right" label-width="105px" style="padding: 0 20px">
         <el-alert
           v-if="!tenantForm.id"
-          title="幼儿园编号可留空，系统会自动生成。保存后可在列表点击“生成幼儿园数据库”按模板创建业务库。"
+          title="幼儿园编号可留空，系统会自动生成。保存后可在列表点击“生成幼儿园数据库”创建业务库。"
           type="info"
           show-icon
           :closable="false"
@@ -125,8 +125,10 @@
         <el-button v-if="currentTenant" type="primary" @click="handleGenerateDatabase(currentTenant)">生成幼儿园数据库</el-button>
       </el-empty>
       <el-descriptions v-else :column="1" border style="margin: 0 20px">
+        <el-descriptions-item label="数据库地址">{{ dbInfo.dbHost && dbInfo.dbPort ? `${dbInfo.dbHost}:${dbInfo.dbPort}` : '-' }}</el-descriptions-item>
         <el-descriptions-item label="数据库名">{{ dbInfo.dbName || '-' }}</el-descriptions-item>
-        <el-descriptions-item label="状态">{{ dbInfo.dbStatus === 'NORMAL' ? '正常' : dbInfo.dbStatus || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="用户名">{{ dbInfo.dbUsername || '-' }}</el-descriptions-item>
+        <el-descriptions-item label="密码">{{ dbInfo.dbPassword || '-' }}</el-descriptions-item>
       </el-descriptions>
       <template #footer>
         <div style="padding: 0 20px">
@@ -214,7 +216,7 @@ const submitTenant = async () => {
 
 const handleGenerateDatabase = (row: any) => {
   ElMessageBox.confirm(
-    `确认给「${row.tenantName}」生成幼儿园数据库？数据库一旦创建后不能删除，也不能重复生成。`,
+    `确认给“${row.tenantName}”生成幼儿园数据库？数据库一旦创建后不能删除，也不能重复生成。`,
     '生成数据库确认',
     {
       type: 'warning',
@@ -232,7 +234,7 @@ const handleGenerateDatabase = (row: any) => {
 }
 
 const handleDeleteTenant = (row: any) => {
-  ElMessageBox.confirm(`确认删除幼儿园「${row.tenantName}」？`, '提示信息', {
+  ElMessageBox.confirm(`确认删除幼儿园“${row.tenantName}”？`, '提示信息', {
     type: 'warning',
     confirmButtonText: '确认',
     cancelButtonText: '取消'
@@ -269,10 +271,5 @@ onMounted(() => {
   display: flex;
   justify-content: flex-end;
   margin-top: 15px;
-}
-
-.check-result {
-  color: #606266;
-  line-height: 32px;
 }
 </style>

@@ -5,23 +5,18 @@
     <resultMap id="BaseResultMap" type="com.kgplatform.system.domain.dto.TenantDbConfigDto">
         <id column="id" property="id"/>
         <result column="tenant_id" property="tenantId"/>
-        <result column="db_type" property="dbType"/>
         <result column="db_host" property="dbHost"/>
         <result column="db_port" property="dbPort"/>
         <result column="db_name" property="dbName"/>
         <result column="db_username" property="dbUsername"/>
-        <result column="jdbc_params" property="jdbcParams"/>
-        <result column="schema_version" property="schemaVersion"/>
-        <result column="db_status" property="dbStatus"/>
-        <result column="last_check_time" property="lastCheckTime"/>
-        <result column="last_check_result" property="lastCheckResult"/>
+        <result column="db_password" property="dbPassword"/>
         <result column="status" property="status"/>
         <result column="delete_status" property="deleteStatus"/>
         <result column="create_time" property="createTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, tenant_id, db_type, db_host, db_port, db_name, db_username, db_password_encrypted, jdbc_params, schema_version, db_status, last_check_time, last_check_result, status, delete_status, create_by, create_time, last_modified_by, last_modified_time
+        id, tenant_id, db_host, db_port, db_name, db_username, db_password, status, delete_status, create_by, create_time, last_modified_by, last_modified_time
     </sql>
 
     <select id="selectPageList" resultMap="BaseResultMap">
@@ -33,12 +28,6 @@
             AND delete_status = 0
             <if test="null != vo.bindTenantId">
                 AND tenant_id = #{vo.bindTenantId}
-            </if>
-            <if test="null != vo.dbType and '' != vo.dbType">
-                AND db_type = #{vo.dbType}
-            </if>
-            <if test="null != vo.dbStatus and '' != vo.dbStatus">
-                AND db_status = #{vo.dbStatus}
             </if>
             <if test="null != vo.status">
                 AND status = #{vo.status}
@@ -57,17 +46,11 @@
 
     <update id="updateProvisioningConfig">
         UPDATE tenant_db_config
-        SET db_type = #{dbType},
-            db_host = #{dbHost},
+        SET db_host = #{dbHost},
             db_port = #{dbPort},
             db_name = #{dbName},
             db_username = #{dbUsername},
-            db_password_encrypted = #{dbPasswordEncrypted},
-            jdbc_params = #{jdbcParams},
-            schema_version = #{schemaVersion},
-            db_status = #{dbStatus},
-            last_check_time = #{lastCheckTime},
-            last_check_result = #{lastCheckResult},
+            db_password = #{dbPassword},
             status = #{status},
             delete_status = #{deleteStatus},
             last_modified_time = NOW()

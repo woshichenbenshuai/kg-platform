@@ -20,24 +20,17 @@ ON DUPLICATE KEY UPDATE
   last_modified_time = VALUES(last_modified_time);
 
 INSERT INTO tenant_db_config (
-  id, tenant_id, db_type, db_host, db_port, db_name, db_username, db_password_encrypted,
-  jdbc_params, schema_version, db_status, last_check_time, last_check_result, status, delete_status,
+  id, tenant_id, db_host, db_port, db_name, db_username, db_password, status, delete_status,
   create_by, create_time, last_modified_by, last_modified_time
 ) VALUES
-(2, 2, 'mysql', '127.0.0.1', 3306, 'kg_kinder_demo_001', 'root', 'ENC(root)', 'useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai', NULL, 'NORMAL', NOW(), 'manual local tenant database attach', b'1', b'0', 'system', NOW(), 'system', NOW()),
-(3, 3, 'mysql', '127.0.0.1', 3306, 'kg_kinder_demo_002', 'root', 'ENC(root)', 'useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai', NULL, 'NORMAL', NOW(), 'manual local tenant database attach', b'1', b'0', 'system', NOW(), 'system', NOW())
+(2, 2, '127.0.0.1', 3306, 'kg_kinder_demo_001', 'root', 'root', b'1', b'0', 'system', NOW(), 'system', NOW()),
+(3, 3, '127.0.0.1', 3306, 'kg_kinder_demo_002', 'root', 'root', b'1', b'0', 'system', NOW(), 'system', NOW())
 ON DUPLICATE KEY UPDATE
-  db_type = VALUES(db_type),
   db_host = VALUES(db_host),
   db_port = VALUES(db_port),
   db_name = VALUES(db_name),
   db_username = VALUES(db_username),
-  db_password_encrypted = VALUES(db_password_encrypted),
-  jdbc_params = VALUES(jdbc_params),
-  schema_version = VALUES(schema_version),
-  db_status = VALUES(db_status),
-  last_check_time = VALUES(last_check_time),
-  last_check_result = VALUES(last_check_result),
+  db_password = VALUES(db_password),
   status = VALUES(status),
   delete_status = VALUES(delete_status),
   last_modified_by = VALUES(last_modified_by),

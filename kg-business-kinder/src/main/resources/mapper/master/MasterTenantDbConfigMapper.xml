@@ -7,12 +7,11 @@
         <result column="db_port" property="dbPort"/>
         <result column="db_name" property="dbName"/>
         <result column="db_username" property="dbUsername"/>
-        <result column="db_password_encrypted" property="dbPasswordEncrypted"/>
-        <result column="jdbc_params" property="jdbcParams"/>
+        <result column="db_password" property="dbPassword"/>
     </resultMap>
 
     <select id="selectEnabledByTenantId" resultMap="TenantDataSourceConfigResultMap">
-        SELECT tenant_id, db_host, db_port, db_name, db_username, db_password_encrypted, jdbc_params
+        SELECT tenant_id, db_host, db_port, db_name, db_username, db_password
         FROM tenant_db_config
         WHERE tenant_id = #{tenantId}
           AND delete_status = 0

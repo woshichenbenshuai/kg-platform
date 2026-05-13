@@ -9,7 +9,6 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 租户数据库配置
@@ -35,14 +34,6 @@ public class TenantDbConfig extends BaseAuditingEntity<Long> implements Serializ
     @Schema(description = "租户ID")
     @TableField(value = "tenant_id")
     private Long tenantId;
-
-    /**
-     * 数据库类型
-     */
-    @Schema(description = "数据库类型")
-    @TableField(value = "db_type")
-    @Size(max = 20, message = "数据库类型字段过长")
-    private String dbType;
 
     /**
      * 数据库主机
@@ -76,51 +67,12 @@ public class TenantDbConfig extends BaseAuditingEntity<Long> implements Serializ
     private String dbUsername;
 
     /**
-     * 加密密码
+     * 数据库密码
      */
-    @Schema(description = "加密密码")
-    @TableField(value = "db_password_encrypted")
-    @Size(max = 512, message = "加密密码字段过长")
-    private String dbPasswordEncrypted;
-
-    /**
-     * JDBC参数
-     */
-    @Schema(description = "JDBC参数")
-    @TableField(value = "jdbc_params")
-    @Size(max = 500, message = "JDBC参数字段过长")
-    private String jdbcParams;
-
-    /**
-     * 子库版本
-     */
-    @Schema(description = "子库版本")
-    @TableField(value = "schema_version")
-    @Size(max = 32, message = "子库版本字段过长")
-    private String schemaVersion;
-
-    /**
-     * 数据库状态
-     */
-    @Schema(description = "数据库状态")
-    @TableField(value = "db_status")
-    @Size(max = 20, message = "数据库状态字段过长")
-    private String dbStatus;
-
-    /**
-     * 最近检查时间
-     */
-    @Schema(description = "最近检查时间")
-    @TableField(value = "last_check_time")
-    private LocalDateTime lastCheckTime;
-
-    /**
-     * 最近检查结果
-     */
-    @Schema(description = "最近检查结果")
-    @TableField(value = "last_check_result")
-    @Size(max = 500, message = "最近检查结果字段过长")
-    private String lastCheckResult;
+    @Schema(description = "数据库密码")
+    @TableField(value = "db_password")
+    @Size(max = 512, message = "数据库密码字段过长")
+    private String dbPassword;
 
     /**
      * 状态 1启用 0禁用

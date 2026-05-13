@@ -7,14 +7,13 @@ import com.kgplatform.common.datasource.routing.TenantDataSourceDefinitionProvid
 import com.kgplatform.common.web.exception.Asserts;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
 /**
- * 通过 Client 读取租户数据源定义
+ * Loads tenant datasource definitions from the master database.
  */
 @Component
 public class MasterTenantDataSourceDefinitionProvider implements TenantDataSourceDefinitionProvider {
+
+    private static final String DEFAULT_JDBC_PARAMS = "useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai";
 
     private final TenantDataSourceConfigClient tenantDataSourceConfigClient;
 
@@ -28,32 +27,15 @@ public class MasterTenantDataSourceDefinitionProvider implements TenantDataSourc
         TenantDataSourceConfigDto config = tenantDataSourceConfigClient.getConfigByTenantId(tenantId);
         Asserts.notNull(config, "租户数据库配置不存在");
 
-        String jdbcParams = defaultJdbcParams(config.getJdbcParams());
         String url = "jdbc:mysql://" + config.getDbHost() + ":" + config.getDbPort()
-                + "/" + config.getDbName() + "?" + jdbcParams;
+                + "/" + config.getDbName() + "?" + DEFAULT_JDBC_PARAMS;
 
         return new TenantDataSourceDefinition(
                 tenantId,
                 "com.mysql.cj.jdbc.Driver",
                 url,
                 config.getDbUsername(),
-                decryptPassword(config.getDbPasswordEncrypted())
+                config.getDbPassword()
         );
-    }
-
-    private String defaultJdbcParams(String jdbcParams) {
-        return jdbcParams == null || jdbcParams.isBlank()
-                ? "useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai"
-                : jdbcParams;
-    }
-
-    private String decryptPassword(String encryptedPassword) {
-        if (encryptedPassword == null || encryptedPassword.isBlank()) {
-            return encryptedPassword;
-        }
-        if (encryptedPassword.startsWith("ENC(") && encryptedPassword.endsWith(")")) {
-            return encryptedPassword.substring(4, encryptedPassword.length() - 1);
-        }
-        return new String(Base64.getDecoder().decode(encryptedPassword), StandardCharsets.UTF_8);
     }
 }

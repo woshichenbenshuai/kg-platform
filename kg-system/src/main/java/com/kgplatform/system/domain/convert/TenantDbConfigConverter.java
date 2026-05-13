@@ -18,7 +18,6 @@ public interface TenantDbConfigConverter {
     TenantDbConfigConverter INSTANCE = Mappers.getMapper(TenantDbConfigConverter.class);
 
     @Mapping(source = "bindTenantId", target = "tenantId")
-    @Mapping(target = "dbPasswordEncrypted", ignore = true)
     @Mapping(target = "createBy", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
     @Mapping(target = "createTime", ignore = true)

@@ -21,15 +21,13 @@ import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
-import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * 基于主库连接创建同 MySQL 实例下的幼儿园业务库。
+ * Creates kindergarten tenant databases from the schema template.
  */
 @Service
 public class TenantDatabaseProvisionerImpl implements TenantDatabaseProvisioner {
@@ -108,17 +106,11 @@ public class TenantDatabaseProvisionerImpl implements TenantDatabaseProvisioner 
     private void saveOrUpdateDbConfig(TenantDbConfig existingConfig, Long tenantId, JdbcInfo jdbcInfo, String dbName) {
         TenantDbConfig entity = existingConfig == null ? new TenantDbConfig() : existingConfig;
         entity.setTenantId(tenantId);
-        entity.setDbType("mysql");
         entity.setDbHost(jdbcInfo.host());
         entity.setDbPort(jdbcInfo.port());
         entity.setDbName(dbName);
         entity.setDbUsername(masterUsername);
-        entity.setDbPasswordEncrypted(encryptPassword(masterPassword));
-        entity.setJdbcParams(jdbcInfo.params());
-        entity.setSchemaVersion("20260513.1");
-        entity.setDbStatus("NORMAL");
-        entity.setLastCheckTime(LocalDateTime.now());
-        entity.setLastCheckResult("按模板重新生成业务库");
+        entity.setDbPassword(masterPassword);
         entity.setStatus(Boolean.TRUE);
         entity.setDeleteStatus(Boolean.FALSE);
         if (entity.getId() == null) {
@@ -170,10 +162,6 @@ public class TenantDatabaseProvisionerImpl implements TenantDatabaseProvisioner 
     private String buildJdbcUrl(String host, int port, String dbName, String params) {
         String database = dbName == null || dbName.isBlank() ? "" : "/" + dbName;
         return "jdbc:mysql://" + host + ":" + port + database + "?" + params;
-    }
-
-    private String encryptPassword(String password) {
-        return Base64.getEncoder().encodeToString(password.getBytes());
     }
 
     private record JdbcInfo(String host, int port, String params) {

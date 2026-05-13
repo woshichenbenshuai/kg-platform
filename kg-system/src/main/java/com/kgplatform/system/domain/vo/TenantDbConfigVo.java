@@ -7,7 +7,6 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
 /**
  * 租户数据库配置
@@ -36,13 +35,6 @@ public class TenantDbConfigVo extends BaseVo {
     @Schema(description = "绑定租户ID")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long bindTenantId;
-
-    /**
-     * 数据库类型
-     */
-    @Schema(description = "数据库类型")
-    @Size(max = 20, message = "数据库类型字段过长")
-    private String dbType;
 
     /**
      * 数据库主机
@@ -77,40 +69,6 @@ public class TenantDbConfigVo extends BaseVo {
     @Schema(description = "数据库密码")
     @Size(max = 512, message = "数据库密码字段过长")
     private String dbPassword;
-
-    /**
-     * JDBC参数
-     */
-    @Schema(description = "JDBC参数")
-    @Size(max = 500, message = "JDBC参数字段过长")
-    private String jdbcParams;
-
-    /**
-     * 子库版本
-     */
-    @Schema(description = "子库版本")
-    @Size(max = 32, message = "子库版本字段过长")
-    private String schemaVersion;
-
-    /**
-     * 数据库状态
-     */
-    @Schema(description = "数据库状态")
-    @Size(max = 20, message = "数据库状态字段过长")
-    private String dbStatus;
-
-    /**
-     * 最近检查时间
-     */
-    @Schema(description = "最近检查时间")
-    private LocalDateTime lastCheckTime;
-
-    /**
-     * 最近检查结果
-     */
-    @Schema(description = "最近检查结果")
-    @Size(max = 500, message = "最近检查结果字段过长")
-    private String lastCheckResult;
 
     /**
      * 状态 1启用 0禁用
