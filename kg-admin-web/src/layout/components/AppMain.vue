@@ -13,12 +13,12 @@
 
 <style lang="scss" scoped>
 .app-main {
-  /* 60 = navbar  */
-  min-height: calc(100vh - 60px);
+  height: 100%;
+  min-height: 0;
   width: 100%;
   position: relative;
-  overflow: hidden;
-  background-color: #F6F9FD;
-  padding: 20px;
+  overflow: auto;
+  padding: 2px 2px 10px;
+  background: transparent;
 }
 </style>

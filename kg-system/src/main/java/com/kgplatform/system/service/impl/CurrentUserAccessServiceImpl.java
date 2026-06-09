@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.kgplatform.common.web.exception.Asserts;
 import com.kgplatform.system.domain.convert.MenuConverter;
 import com.kgplatform.system.domain.dto.CurrentUserAccessDto;
+import com.kgplatform.system.domain.dto.CurrentUserTenantDto;
 import com.kgplatform.system.domain.dto.MenuDto;
 import com.kgplatform.system.domain.po.Menu;
 import com.kgplatform.system.domain.po.Role;
 import com.kgplatform.system.domain.po.RoleMenu;
+import com.kgplatform.system.domain.po.Tenant;
 import com.kgplatform.system.domain.po.User;
 import com.kgplatform.system.domain.po.UserRole;
 import com.kgplatform.system.domain.po.UserTenant;
@@ -15,6 +17,7 @@ import com.kgplatform.system.service.ICurrentUserAccessService;
 import com.kgplatform.system.service.IMenuService;
 import com.kgplatform.system.service.IRoleMenuService;
 import com.kgplatform.system.service.IRoleService;
+import com.kgplatform.system.service.ITenantService;
 import com.kgplatform.system.service.IUserRoleService;
 import com.kgplatform.system.service.IUserService;
 import com.kgplatform.system.service.IUserTenantService;
@@ -24,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -45,19 +49,22 @@ public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
     private final IRoleService roleService;
     private final IRoleMenuService roleMenuService;
     private final IMenuService menuService;
+    private final ITenantService tenantService;
 
     public CurrentUserAccessServiceImpl(IUserService userService,
                                         IUserTenantService userTenantService,
                                         IUserRoleService userRoleService,
                                         IRoleService roleService,
                                         IRoleMenuService roleMenuService,
-                                        IMenuService menuService) {
+                                        IMenuService menuService,
+                                        ITenantService tenantService) {
         this.userService = userService;
         this.userTenantService = userTenantService;
         this.userRoleService = userRoleService;
         this.roleService = roleService;
         this.roleMenuService = roleMenuService;
         this.menuService = menuService;
+        this.tenantService = tenantService;
     }
 
     @Override
@@ -91,6 +98,7 @@ public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
         dto.setRoleCodes(roleCodes);
         dto.setRoleNames(roleNames);
         dto.setMenus(menus);
+        dto.setTenants(getAccessibleTenants(userId));
         return dto;
     }
 
@@ -103,6 +111,86 @@ public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
                 .distinct()
                 .collect(Collectors.toList());
         return resolveCurrentTenantId(userId, roleCodes);
+    }
+
+    @Override
+    public List<CurrentUserTenantDto> getAccessibleTenants(Long userId) {
+        Asserts.notNull(userId, "鐢ㄦ埛涓婚敭涓嶈兘涓虹┖");
+        List<String> roleCodes = getCurrentRoles(userId).stream()
+                .map(Role::getRoleCode)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        if (roleCodes.contains(PLATFORM_ADMIN)) {
+            return tenantService.list(Wrappers.<Tenant>lambdaQuery()
+                            .eq(Tenant::getDeleteStatus, Boolean.FALSE)
+                            .eq(Tenant::getStatus, Boolean.TRUE)
+                            .orderByAsc(Tenant::getId))
+                    .stream()
+                    .map(tenant -> new CurrentUserTenantDto()
+                            .setTenantId(tenant.getId())
+                            .setTenantCode(tenant.getTenantCode())
+                            .setTenantName(tenant.getTenantName())
+                            .setIdentityType("PLATFORM_ADMIN")
+                            .setDefaultFlag(Boolean.FALSE))
+                    .collect(Collectors.toList());
+        }
+
+        List<UserTenant> userTenants = userTenantService.list(Wrappers.<UserTenant>lambdaQuery()
+                .eq(UserTenant::getUserId, userId)
+                .eq(UserTenant::getDeleteStatus, Boolean.FALSE)
+                .eq(UserTenant::getStatus, Boolean.TRUE)
+                .orderByDesc(UserTenant::getDefaultFlag)
+                .orderByAsc(UserTenant::getId));
+        if (userTenants.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Long> tenantIds = userTenants.stream()
+                .map(UserTenant::getTenantId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        if (tenantIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Map<Long, Tenant> tenantMap = tenantService.list(Wrappers.<Tenant>lambdaQuery()
+                        .in(Tenant::getId, tenantIds)
+                        .eq(Tenant::getDeleteStatus, Boolean.FALSE)
+                        .eq(Tenant::getStatus, Boolean.TRUE))
+                .stream()
+                .collect(Collectors.toMap(Tenant::getId, tenant -> tenant, (left, right) -> left));
+
+        return userTenants.stream()
+                .filter(userTenant -> userTenant.getTenantId() != null && tenantMap.containsKey(userTenant.getTenantId()))
+                .map(userTenant -> {
+                    Tenant tenant = tenantMap.get(userTenant.getTenantId());
+                    return new CurrentUserTenantDto()
+                            .setTenantId(tenant.getId())
+                            .setTenantCode(tenant.getTenantCode())
+                            .setTenantName(tenant.getTenantName())
+                            .setIdentityType(userTenant.getIdentityType())
+                            .setDefaultFlag(userTenant.getDefaultFlag());
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void assertTenantAccessible(Long userId, Long tenantId) {
+        Asserts.notNull(userId, "鐢ㄦ埛涓婚敭涓嶈兘涓虹┖");
+        Asserts.notNull(tenantId, "绉熸埛涓婚敭涓嶈兘涓虹┖");
+        List<String> roleCodes = getCurrentRoles(userId).stream()
+                .map(Role::getRoleCode)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        if (roleCodes.contains(PLATFORM_ADMIN)) {
+            return;
+        }
+        boolean accessible = getAccessibleTenants(userId).stream()
+                .anyMatch(tenant -> Objects.equals(tenant.getTenantId(), tenantId));
+        Asserts.isTrue(accessible, "Current user cannot access target tenant");
     }
 
     private Long resolveCurrentTenantId(Long userId, List<String> roleCodes) {

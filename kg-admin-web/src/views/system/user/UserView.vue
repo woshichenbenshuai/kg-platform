@@ -199,10 +199,6 @@ const submitForm = async () => {
     } else {
       await createUser(formData.value)
     }
-    // save role assignments
-    if (formData.value.roleIds && formData.value.roleIds.length > 0) {
-      // This is a simplified approach; actual implementation may need backend batch API
-    }
     ElMessage.success('保存成功')
     drawerVisible.value = false
     getList()

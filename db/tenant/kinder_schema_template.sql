@@ -64,6 +64,25 @@ CREATE TABLE IF NOT EXISTS guardian (
   KEY idx_guardian_phone (phone)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Guardian';
 
+CREATE TABLE IF NOT EXISTS teacher (
+  id BIGINT(20) NOT NULL COMMENT 'Primary key',
+  user_id BIGINT(20) DEFAULT NULL COMMENT 'Platform user id',
+  teacher_no VARCHAR(64) NOT NULL COMMENT 'Teacher number',
+  teacher_name VARCHAR(100) NOT NULL COMMENT 'Teacher name',
+  phone VARCHAR(32) DEFAULT NULL COMMENT 'Phone number',
+  gender VARCHAR(20) DEFAULT NULL COMMENT 'Gender',
+  status TINYINT(1) NOT NULL DEFAULT 1 COMMENT 'Status',
+  delete_status BIT(1) NOT NULL DEFAULT b'0' COMMENT 'Logical delete',
+  create_by VARCHAR(64) DEFAULT NULL COMMENT 'Created by',
+  create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Created time',
+  last_modified_by VARCHAR(64) DEFAULT NULL COMMENT 'Last modified by',
+  last_modified_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Last modified time',
+  PRIMARY KEY (id),
+  UNIQUE KEY uk_teacher_no (teacher_no),
+  UNIQUE KEY uk_teacher_user (user_id),
+  KEY idx_teacher_phone (phone)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Teacher';
+
 CREATE TABLE IF NOT EXISTS student_guardian_relation (
   id BIGINT(20) NOT NULL COMMENT 'Primary key',
   student_id BIGINT(20) NOT NULL COMMENT 'Student id',

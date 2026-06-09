@@ -43,10 +43,11 @@
               <el-tag :type="row.status ? 'success' : 'danger'">{{ row.status ? '启用' : '停用' }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" fixed="right" width="360" align="center">
+          <el-table-column label="操作" fixed="right" width="430" align="center">
             <template #default="{ row }">
               <el-button type="primary" link size="small" @click="handleEditTenant(row)">编辑</el-button>
               <el-button v-if="!row.hasDatabase" type="warning" link size="small" @click="handleGenerateDatabase(row)">生成幼儿园数据库</el-button>
+              <el-button type="success" link size="small" @click="handleOpenOperator(row)">开通管理员</el-button>
               <el-button type="success" link size="small" @click="handleDbInfo(row)">数据库信息</el-button>
               <el-button type="danger" link size="small" :disabled="row.hasDatabase" @click="handleDeleteTenant(row)">删除</el-button>
             </template>
@@ -136,13 +137,48 @@
         </div>
       </template>
     </el-drawer>
+
+    <el-drawer title="开通园所管理员账号" v-model="operatorDrawerVisible" size="500px" direction="rtl">
+      <el-alert
+        v-if="currentTenant"
+        :title="`当前幼儿园：${currentTenant.tenantName}`"
+        type="info"
+        show-icon
+        :closable="false"
+        style="margin: 0 20px 18px"
+      />
+      <el-alert
+        title="手机号会作为登录账号，并自动绑定当前幼儿园、分配 OPERATOR 角色。"
+        type="warning"
+        show-icon
+        :closable="false"
+        style="margin: 0 20px 18px"
+      />
+      <el-form :model="operatorForm" label-position="right" label-width="105px" style="padding: 0 20px">
+        <el-form-item label="管理员姓名：">
+          <el-input v-model="operatorForm.nickname" placeholder="请输入管理员姓名" />
+        </el-form-item>
+        <el-form-item label="手机号：">
+          <el-input v-model="operatorForm.phone" placeholder="请输入手机号" />
+        </el-form-item>
+        <el-form-item label="初始密码：">
+          <el-input v-model="operatorForm.password" type="password" show-password placeholder="请输入初始密码" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div style="padding: 0 20px">
+          <el-button @click="operatorDrawerVisible = false">取消</el-button>
+          <el-button type="primary" @click="submitOperatorAccount">开通</el-button>
+        </div>
+      </template>
+    </el-drawer>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { createTenant, deleteTenant, fetchTenants, rebuildTenantDatabase, updateTenant } from '@/api/system/tenant'
+import { createTenant, deleteTenant, fetchTenants, openTenantOperatorAccount, rebuildTenantDatabase, updateTenant } from '@/api/system/tenant'
 import { fetchTenantDbConfigs } from '@/api/system/tenant-db-config'
 
 const loading = ref(false)
@@ -159,6 +195,8 @@ const tenantForm = ref<any>({})
 const dbDrawerVisible = ref(false)
 const currentTenant = ref<any>(null)
 const dbInfo = ref<any>(null)
+const operatorDrawerVisible = ref(false)
+const operatorForm = ref<any>({})
 
 const getList = async () => {
   loading.value = true
@@ -249,6 +287,26 @@ const handleDbInfo = async (row: any) => {
   currentTenant.value = row
   dbInfo.value = row.dbInfo || (await fetchTenantDatabase(row.id))
   dbDrawerVisible.value = true
+}
+
+const handleOpenOperator = (row: any) => {
+  currentTenant.value = row
+  operatorForm.value = {
+    nickname: row.contactName || '',
+    phone: row.contactPhone || ''
+  }
+  operatorDrawerVisible.value = true
+}
+
+const submitOperatorAccount = async () => {
+  if (!currentTenant.value?.id) {
+    return
+  }
+  const res = await openTenantOperatorAccount(currentTenant.value.id, operatorForm.value)
+  if (res.data.code === '0') {
+    ElMessage.success(`园所管理员账号已开通：${res.data.data?.username || operatorForm.value.phone}`)
+    operatorDrawerVisible.value = false
+  }
 }
 
 onMounted(() => {

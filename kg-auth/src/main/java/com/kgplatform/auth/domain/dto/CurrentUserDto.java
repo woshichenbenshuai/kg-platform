@@ -1,6 +1,7 @@
 package com.kgplatform.auth.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.kgplatform.system.domain.dto.CurrentUserTenantDto;
 import com.kgplatform.system.domain.dto.MenuDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -44,4 +45,6 @@ public class CurrentUserDto {
 
     @Schema(description = "菜单集合")
     private List<MenuDto> menus;
+
+    private List<CurrentUserTenantDto> tenants;
 }

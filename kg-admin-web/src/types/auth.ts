@@ -17,8 +17,18 @@ export interface MenuDto {
 export interface CurrentUserDto {
   userId: number
   username: string
+  nickname?: string
   tenantId: number | null
   roleCodes: string[]
   roleNames: string[]
   menus: MenuDto[]
+  tenants: CurrentUserTenantDto[]
+}
+
+export interface CurrentUserTenantDto {
+  tenantId: number
+  tenantCode: string
+  tenantName: string
+  identityType: string
+  defaultFlag: boolean
 }

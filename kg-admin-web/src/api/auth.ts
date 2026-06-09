@@ -23,3 +23,11 @@ export function login(data: LoginVo) {
 export function getCurrentUser() {
   return http.get<ApiResponse<CurrentUserDto>>('/auth/current-user')
 }
+
+export function fetchCurrentUserTenants() {
+  return http.get('/auth/tenants')
+}
+
+export function switchTenant(tenantId: number | string) {
+  return http.post<ApiResponse<LoginDto>>('/auth/switch-tenant', { tenantId })
+}

@@ -46,4 +46,7 @@ public class CurrentUserAccessDto implements Serializable {
 
     @Schema(description = "菜单集合")
     private List<MenuDto> menus;
+
+    @Schema(description = "可访问租户集合")
+    private List<CurrentUserTenantDto> tenants;
 }

@@ -6,9 +6,12 @@ import com.kgplatform.common.web.core.Result;
 import com.kgplatform.common.web.exception.Asserts;
 import com.kgplatform.system.domain.convert.TenantConverter;
 import com.kgplatform.system.domain.dto.TenantDto;
+import com.kgplatform.system.domain.dto.TenantOperatorAccountDto;
 import com.kgplatform.system.domain.po.Tenant;
+import com.kgplatform.system.domain.vo.TenantOperatorAccountVo;
 import com.kgplatform.system.domain.vo.TenantVo;
 import com.kgplatform.system.service.ITenantService;
+import com.kgplatform.system.service.TenantOperatorAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,10 +38,14 @@ public class TenantResource {
 
     private final TenantConverter tenantConverter;
     private final ITenantService tenantService;
+    private final TenantOperatorAccountService tenantOperatorAccountService;
 
-    public TenantResource(ITenantService tenantService, TenantConverter tenantConverter) {
+    public TenantResource(ITenantService tenantService,
+                          TenantConverter tenantConverter,
+                          TenantOperatorAccountService tenantOperatorAccountService) {
         this.tenantService = tenantService;
         this.tenantConverter = tenantConverter;
+        this.tenantOperatorAccountService = tenantOperatorAccountService;
     }
 
 
@@ -112,6 +119,13 @@ public class TenantResource {
     @Operation(summary = "重建幼儿园业务库")
     public Result<String> rebuildDatabase(@Parameter(description = "主键") @PathVariable Long id) {
         return Result.ok(this.tenantService.rebuildTenantDatabase(id));
+    }
+
+    @PostMapping("/{id}/operator-account")
+    @Operation(summary = "开通园所管理员账号")
+    public Result<TenantOperatorAccountDto> openOperatorAccount(@Parameter(description = "租户主键") @PathVariable Long id,
+                                                               @RequestBody TenantOperatorAccountVo vo) {
+        return Result.ok(this.tenantOperatorAccountService.openAccount(id, vo));
     }
 
 

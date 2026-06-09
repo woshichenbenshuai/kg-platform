@@ -5,13 +5,15 @@
     <resultMap id="BaseResultMap" type="com.kgplatform.system.domain.dto.UserDto">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
+        <result column="nickname" property="nickname"/>
+        <result column="phone" property="phone"/>
         <result column="status" property="status"/>
         <result column="delete_status" property="deleteStatus"/>
         <result column="create_time" property="createTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, username, status, delete_status, create_by, create_time, last_modified_by, last_modified_time
+        id, username, nickname, phone, status, delete_status, create_by, create_time, last_modified_by, last_modified_time
     </sql>
 
     <select id="selectPageList" resultMap="BaseResultMap">

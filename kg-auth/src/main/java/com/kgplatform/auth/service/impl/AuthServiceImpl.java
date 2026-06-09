@@ -5,15 +5,19 @@ import com.kgplatform.auth.domain.dto.CurrentUserDto;
 import com.kgplatform.auth.domain.dto.LoginDto;
 import com.kgplatform.auth.domain.po.AuthUser;
 import com.kgplatform.auth.domain.vo.LoginVo;
+import com.kgplatform.auth.domain.vo.SwitchTenantVo;
 import com.kgplatform.auth.mapper.AuthUserMapper;
 import com.kgplatform.auth.service.AuthService;
 import com.kgplatform.common.security.jwt.JwtUtils;
 import com.kgplatform.common.security.model.LoginUser;
 import com.kgplatform.common.web.exception.Asserts;
 import com.kgplatform.system.domain.dto.CurrentUserAccessDto;
+import com.kgplatform.system.domain.dto.CurrentUserTenantDto;
 import com.kgplatform.system.service.ICurrentUserAccessService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 认证服务实现
@@ -72,6 +76,29 @@ public class AuthServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> imple
         currentUserDto.setRoleCodes(accessDto.getRoleCodes());
         currentUserDto.setRoleNames(accessDto.getRoleNames());
         currentUserDto.setMenus(accessDto.getMenus());
+        currentUserDto.setTenants(accessDto.getTenants());
         return currentUserDto;
+    }
+
+    @Override
+    public List<CurrentUserTenantDto> tenants(LoginUser loginUser) {
+        Asserts.notNull(loginUser, "Current login user is required");
+        Asserts.notNull(loginUser.getUserId(), "Current login user id is required");
+        return currentUserAccessService.getAccessibleTenants(loginUser.getUserId());
+    }
+
+    @Override
+    public LoginDto switchTenant(LoginUser loginUser, SwitchTenantVo vo) {
+        Asserts.notNull(loginUser, "Current login user is required");
+        Asserts.notNull(loginUser.getUserId(), "Current login user id is required");
+        Asserts.notNull(vo, "Switch tenant parameter is required");
+        Asserts.notNull(vo.getTenantId(), "Tenant id is required");
+        currentUserAccessService.assertTenantAccessible(loginUser.getUserId(), vo.getTenantId());
+        return new LoginDto(jwtUtils.createToken(
+                loginUser.getUserId(),
+                loginUser.getUsername(),
+                loginUser.getNickname(),
+                vo.getTenantId()
+        ));
     }
 }

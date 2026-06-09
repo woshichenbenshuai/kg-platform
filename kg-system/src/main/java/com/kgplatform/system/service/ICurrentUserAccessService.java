@@ -1,6 +1,9 @@
 package com.kgplatform.system.service;
 
 import com.kgplatform.system.domain.dto.CurrentUserAccessDto;
+import com.kgplatform.system.domain.dto.CurrentUserTenantDto;
+
+import java.util.List;
 
 /**
  * 当前用户访问聚合 Service 接口
@@ -25,4 +28,8 @@ public interface ICurrentUserAccessService {
      * @return 当前租户主键
      */
     Long getCurrentTenantId(Long userId);
+
+    List<CurrentUserTenantDto> getAccessibleTenants(Long userId);
+
+    void assertTenantAccessible(Long userId, Long tenantId);
 }

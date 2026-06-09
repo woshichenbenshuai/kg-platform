@@ -9,6 +9,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * 系统用户
@@ -70,4 +71,7 @@ public class UserVo extends BaseVo {
      */
     @Schema(description = "是否删除 1删除  0未删除")
     private Boolean deleteStatus;
+
+    @Schema(description = "绑定角色ID集合")
+    private List<Long> roleIds;
 }

@@ -33,6 +33,55 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('@/views/platform/TenantConfigView.vue')
       },
       {
+        path: 'kinder',
+        redirect: '/kinder/teachers'
+      },
+      {
+        path: 'kinder/teachers',
+        name: 'kinder-teachers',
+        component: () => import('@/views/kinder/teacher/TeacherView.vue')
+      },
+      {
+        path: 'kinder/classes',
+        name: 'kinder-classes',
+        component: () => import('@/views/kinder/class/ClassView.vue')
+      },
+      {
+        path: 'kinder/students',
+        name: 'kinder-students',
+        component: () => import('@/views/kinder/student/StudentView.vue')
+      },
+      {
+        path: 'kinder/guardians',
+        name: 'kinder-guardians',
+        component: () => import('@/views/kinder/guardian/GuardianView.vue')
+      },
+      {
+        path: 'kinder/student-guardian-relations',
+        name: 'kinder-student-guardian-relations',
+        component: () => import('@/views/kinder/relation/StudentGuardianRelationView.vue')
+      },
+      {
+        path: 'kinder/notices',
+        name: 'kinder-notices',
+        component: () => import('@/views/kinder/notice/NoticeView.vue')
+      },
+      {
+        path: 'kinder/recipes',
+        name: 'kinder-recipes',
+        component: () => import('@/views/kinder/recipe/RecipeView.vue')
+      },
+      {
+        path: 'kinder/growth-records',
+        name: 'kinder-growth-records',
+        component: () => import('@/views/kinder/growth/GrowthRecordView.vue')
+      },
+      {
+        path: 'kinder/leave-requests',
+        name: 'kinder-leave-requests',
+        component: () => import('@/views/kinder/leave/LeaveRequestView.vue')
+      },
+      {
         path: 'system/role-menus',
         name: 'role-menus',
         component: RolePermissionView

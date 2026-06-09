@@ -233,7 +233,17 @@ INSERT INTO sys_menu (
 (5, 'MENU_MGR', '菜单管理', 'PLATFORM', 3, '/system/menus', NULL, 'Menu', b'1', b'1', 0, '菜单管理', b'1', b'0', 'system', NOW(), 'system', NOW()),
 (6, 'DICT_MGR', '字典管理', 'PLATFORM', 3, '/system/dicts', NULL, 'Notebook', b'1', b'1', 0, '字典管理', b'1', b'0', 'system', NOW(), 'system', NOW()),
 (7, 'ROLE_MENU_MGR', '角色权限', 'PLATFORM', 3, '/system/role-menus', NULL, 'Lock', b'1', b'1', 4, '角色权限', b'1', b'0', 'system', NOW(), 'system', NOW()),
-(8, 'PLATFORM_TENANT_CONFIG', '幼儿园配置', 'PLATFORM', 1, '/platform/tenants', 'views/platform/TenantConfigView.vue', 'OfficeBuilding', b'1', b'1', 12, '平台幼儿园与租户数据库配置', b'1', b'0', 'system', NOW(), 'system', NOW())
+(8, 'PLATFORM_TENANT_CONFIG', '幼儿园配置', 'PLATFORM', 1, '/platform/tenants', 'views/platform/TenantConfigView.vue', 'OfficeBuilding', b'1', b'1', 12, '平台幼儿园与租户数据库配置', b'1', b'0', 'system', NOW(), 'system', NOW()),
+(20, 'KINDER_BUSINESS', '园所业务', 'KINDER', NULL, '/kinder', NULL, 'School', b'1', b'1', 20, '园所业务根菜单', b'1', b'0', 'system', NOW(), 'system', NOW()),
+(21, 'KINDER_TEACHER_MGMT', '教师管理', 'KINDER', 20, '/kinder/teachers', NULL, 'UserFilled', b'1', b'1', 21, '园所教师档案管理', b'1', b'0', 'system', NOW(), 'system', NOW()),
+(22, 'KINDER_CLASS_MGMT', '班级管理', 'KINDER', 20, '/kinder/classes', NULL, 'Collection', b'1', b'1', 22, '园所班级管理', b'1', b'0', 'system', NOW(), 'system', NOW()),
+(23, 'KINDER_STUDENT_MGMT', '学生管理', 'KINDER', 20, '/kinder/students', NULL, 'User', b'1', b'1', 23, '园所学生档案管理', b'1', b'0', 'system', NOW(), 'system', NOW()),
+(24, 'KINDER_GUARDIAN_MGMT', '家长管理', 'KINDER', 20, '/kinder/guardians', NULL, 'Avatar', b'1', b'1', 24, '园所家长档案管理', b'1', b'0', 'system', NOW(), 'system', NOW()),
+(25, 'KINDER_STUDENT_GUARDIAN_MGMT', '学生家长绑定', 'KINDER', 20, '/kinder/student-guardian-relations', NULL, 'Link', b'1', b'1', 25, '学生与家长关系管理', b'1', b'0', 'system', NOW(), 'system', NOW()),
+(26, 'KINDER_NOTICE_MGMT', '通知管理', 'KINDER', 20, '/kinder/notices', NULL, 'Bell', b'1', b'1', 26, '园所通知管理', b'1', b'0', 'system', NOW(), 'system', NOW()),
+(27, 'KINDER_RECIPE_MGMT', '食谱管理', 'KINDER', 20, '/kinder/recipes', NULL, 'Dish', b'1', b'1', 27, '园所每日食谱管理', b'1', b'0', 'system', NOW(), 'system', NOW()),
+(28, 'KINDER_GROWTH_RECORD_MGMT', '成长记录', 'KINDER', 20, '/kinder/growth-records', NULL, 'Notebook', b'1', b'1', 28, '学生成长记录管理', b'1', b'0', 'system', NOW(), 'system', NOW()),
+(29, 'KINDER_LEAVE_REQUEST_MGMT', '请假审批', 'KINDER', 20, '/kinder/leave-requests', NULL, 'Tickets', b'1', b'1', 29, '家长请假审批', b'1', b'0', 'system', NOW(), 'system', NOW())
 ON DUPLICATE KEY UPDATE
   menu_name = VALUES(menu_name),
   menu_scope = VALUES(menu_scope),
@@ -289,7 +299,17 @@ INSERT INTO role_menu (
 (5, 1, 5, b'1', b'0', 'system', NOW(), 'system', NOW()),
 (6, 1, 6, b'1', b'0', 'system', NOW(), 'system', NOW()),
 (7, 1, 7, b'1', b'0', 'system', NOW(), 'system', NOW()),
-(8, 1, 8, b'1', b'0', 'system', NOW(), 'system', NOW())
+(8, 1, 8, b'1', b'0', 'system', NOW(), 'system', NOW()),
+(20, 2, 20, b'1', b'0', 'system', NOW(), 'system', NOW()),
+(21, 2, 21, b'1', b'0', 'system', NOW(), 'system', NOW()),
+(22, 2, 22, b'1', b'0', 'system', NOW(), 'system', NOW()),
+(23, 2, 23, b'1', b'0', 'system', NOW(), 'system', NOW()),
+(24, 2, 24, b'1', b'0', 'system', NOW(), 'system', NOW()),
+(25, 2, 25, b'1', b'0', 'system', NOW(), 'system', NOW()),
+(26, 2, 26, b'1', b'0', 'system', NOW(), 'system', NOW()),
+(27, 2, 27, b'1', b'0', 'system', NOW(), 'system', NOW()),
+(28, 2, 28, b'1', b'0', 'system', NOW(), 'system', NOW()),
+(29, 2, 29, b'1', b'0', 'system', NOW(), 'system', NOW())
 ON DUPLICATE KEY UPDATE
   status = VALUES(status),
   delete_status = VALUES(delete_status),
