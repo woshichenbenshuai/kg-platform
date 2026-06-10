@@ -60,10 +60,7 @@ public class GrowthRecordServiceImpl extends ServiceImpl<GrowthRecordMapper, Gro
     @Override
     public boolean deleteGrowthRecord(Long id) {
         Asserts.notNull(id, "Growth record id is required");
-        GrowthRecord entity = new GrowthRecord();
-        entity.setId(id);
-        entity.setDeleteStatus(Boolean.TRUE);
-        return updateById(entity);
+        return removeById(id);
     }
 
     private void validate(GrowthRecordVo vo, boolean requireId) {

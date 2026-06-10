@@ -67,10 +67,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
     @Override
     public boolean deleteTeacher(Long id) {
         Asserts.notNull(id, "Teacher id is required");
-        Teacher entity = new Teacher();
-        entity.setId(id);
-        entity.setDeleteStatus(Boolean.TRUE);
-        return updateById(entity);
+        return removeById(id);
     }
 
     private void assertTeacherNoAvailable(String teacherNo, Long id) {

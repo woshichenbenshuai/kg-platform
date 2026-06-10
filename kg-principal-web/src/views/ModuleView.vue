@@ -37,6 +37,7 @@
     <div v-if="editing" class="drawer-mask" @click.self="editing = null">
       <form class="drawer" @submit.prevent="submit">
         <h3>{{ editingMode }}{{ config.title }}</h3>
+        <p v-if="formError" class="form-error">{{ formError }}</p>
         <label v-for="field in config.fields" :key="field.key">
           {{ field.label }}<em v-if="field.required">*</em>
           <textarea v-if="field.type === 'textarea'" v-model="editing[field.key]" :placeholder="field.placeholder" />
@@ -50,7 +51,7 @@
         </label>
         <div class="drawer-actions">
           <button type="button" class="ghost" @click="editing = null">取消</button>
-          <button>{{ editingMode === '新增' ? '创建' : '保存' }}</button>
+          <button :disabled="submitting">{{ submitting ? '提交中...' : editingMode === '新增' ? '创建' : '保存' }}</button>
         </div>
       </form>
     </div>
@@ -79,6 +80,8 @@ const records = ref<Record<string, any>[]>([])
 const keyword = ref('')
 const editing = ref<Record<string, any> | null>(null)
 const editingMode = ref('新增')
+const formError = ref('')
+const submitting = ref(false)
 const sourceOptions = ref<Record<string, FieldOption[]>>({})
 const config = computed<ModuleConfig>(() => modules[String(route.params.moduleKey)] || modules.classes)
 
@@ -119,11 +122,13 @@ function defaults() {
 
 function openCreate() {
   editingMode.value = '新增'
+  formError.value = ''
   editing.value = defaults()
 }
 
 function openEdit(row: Record<string, any>) {
   editingMode.value = '编辑'
+  formError.value = ''
   editing.value = { ...defaults(), ...row }
 }
 
@@ -166,18 +171,27 @@ function normalizePayload() {
       continue
     }
     if (field.valueType === 'number' && value !== null && value !== undefined) payload[field.key] = Number(value)
-    if (field.valueType === 'boolean') payload[field.key] = value === true || value === 'true' || value === 1
+    else if (field.valueType === 'boolean') payload[field.key] = value === true || value === 'true' || value === 1
+    else payload[field.key] = value
   }
   return payload
 }
 
 async function submit() {
   if (!editing.value) return
-  const payload = normalizePayload()
-  if (payload.id) await updateItem(config.value, payload)
-  else await createItem(config.value, payload)
-  editing.value = null
-  await refreshPage()
+  formError.value = ''
+  submitting.value = true
+  try {
+    const payload = normalizePayload()
+    if (payload.id) await updateItem(config.value, payload)
+    else await createItem(config.value, payload)
+    editing.value = null
+    await refreshPage()
+  } catch (error: any) {
+    formError.value = error?.response?.data?.msg || error?.response?.data?.message || error?.message || '提交失败，请检查表单内容'
+  } finally {
+    submitting.value = false
+  }
 }
 
 async function remove(row: Record<string, any>) {
@@ -190,6 +204,7 @@ async function remove(row: Record<string, any>) {
 watch(() => route.params.moduleKey, async () => {
   keyword.value = ''
   editing.value = null
+  formError.value = ''
   await refreshPage()
 })
 

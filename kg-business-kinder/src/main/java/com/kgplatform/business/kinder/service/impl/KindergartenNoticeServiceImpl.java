@@ -53,10 +53,7 @@ public class KindergartenNoticeServiceImpl extends ServiceImpl<KindergartenNotic
     @Override
     public boolean deleteNotice(Long id) {
         Asserts.notNull(id, "Notice id is required");
-        KindergartenNotice entity = new KindergartenNotice();
-        entity.setId(id);
-        entity.setDeleteStatus(Boolean.TRUE);
-        return updateById(entity);
+        return removeById(id);
     }
 
     private void validate(KindergartenNoticeVo vo, boolean requireId) {

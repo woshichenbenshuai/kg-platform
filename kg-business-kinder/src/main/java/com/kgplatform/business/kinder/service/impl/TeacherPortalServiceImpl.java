@@ -195,10 +195,7 @@ public class TeacherPortalServiceImpl implements TeacherPortalService {
         GrowthRecord existing = growthRecordMapper.selectById(id);
         Asserts.notNull(existing, "成长记录不存在");
         Asserts.isTrue(canAccessStudent(existing.getStudentId()), "无权删除该成长记录");
-        GrowthRecord entity = new GrowthRecord();
-        entity.setId(id);
-        entity.setDeleteStatus(Boolean.TRUE);
-        return growthRecordMapper.updateById(entity) > 0;
+        return growthRecordMapper.deleteById(id) > 0;
     }
 
     private Teacher requireCurrentTeacher() {

@@ -64,10 +64,7 @@ public class KindergartenClassServiceImpl extends ServiceImpl<KindergartenClassM
     @Override
     public boolean deleteClass(Long id) {
         Asserts.notNull(id, "班级主键不能为空");
-        KindergartenClass entity = new KindergartenClass();
-        entity.setId(id);
-        entity.setDeleteStatus(Boolean.TRUE);
-        return updateById(entity);
+        return removeById(id);
     }
 
     private void assertClassCodeAvailable(String classCode, Long id) {

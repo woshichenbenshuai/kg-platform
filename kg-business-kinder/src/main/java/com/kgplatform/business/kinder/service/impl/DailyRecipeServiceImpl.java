@@ -48,10 +48,7 @@ public class DailyRecipeServiceImpl extends ServiceImpl<DailyRecipeMapper, Daily
     @Override
     public boolean deleteRecipe(Long id) {
         Asserts.notNull(id, "Recipe id is required");
-        DailyRecipe entity = new DailyRecipe();
-        entity.setId(id);
-        entity.setDeleteStatus(Boolean.TRUE);
-        return updateById(entity);
+        return removeById(id);
     }
 
     private void validate(DailyRecipeVo vo, boolean requireId) {

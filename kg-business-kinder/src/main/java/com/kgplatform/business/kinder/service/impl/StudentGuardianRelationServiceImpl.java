@@ -77,10 +77,7 @@ public class StudentGuardianRelationServiceImpl extends ServiceImpl<StudentGuard
     @Override
     public boolean deleteRelation(Long id) {
         Asserts.notNull(id, "绑定关系主键不能为空");
-        StudentGuardianRelation entity = new StudentGuardianRelation();
-        entity.setId(id);
-        entity.setDeleteStatus(Boolean.TRUE);
-        return updateById(entity);
+        return removeById(id);
     }
 
     private void validateRelation(StudentGuardianRelationVo vo) {

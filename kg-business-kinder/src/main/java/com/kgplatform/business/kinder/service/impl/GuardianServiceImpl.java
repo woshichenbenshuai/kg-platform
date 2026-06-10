@@ -62,10 +62,7 @@ public class GuardianServiceImpl extends ServiceImpl<GuardianMapper, Guardian> i
     @Override
     public boolean deleteGuardian(Long id) {
         Asserts.notNull(id, "家长主键不能为空");
-        Guardian entity = new Guardian();
-        entity.setId(id);
-        entity.setDeleteStatus(Boolean.TRUE);
-        return updateById(entity);
+        return removeById(id);
     }
 
     private void assertUserAvailable(Long userId, Long id) {

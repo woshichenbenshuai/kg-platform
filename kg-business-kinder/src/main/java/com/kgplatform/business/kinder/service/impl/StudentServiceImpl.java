@@ -80,10 +80,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
     @Override
     public boolean deleteStudent(Long id) {
         Asserts.notNull(id, "学生主键不能为空");
-        Student student = new Student();
-        student.setId(id);
-        student.setDeleteStatus(Boolean.TRUE);
-        return updateById(student);
+        return removeById(id);
     }
 
     @Override

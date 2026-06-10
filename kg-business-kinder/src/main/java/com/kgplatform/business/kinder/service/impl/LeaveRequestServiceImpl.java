@@ -42,9 +42,6 @@ public class LeaveRequestServiceImpl extends ServiceImpl<LeaveRequestMapper, Lea
     @Override
     public boolean deleteLeaveRequest(Long id) {
         Asserts.notNull(id, "Leave request id is required");
-        LeaveRequest entity = new LeaveRequest();
-        entity.setId(id);
-        entity.setDeleteStatus(Boolean.TRUE);
-        return updateById(entity);
+        return removeById(id);
     }
 }
