@@ -10,11 +10,7 @@
 
     <section v-if="session.user" class="tenant-card">
       <span>{{ session.user.nickname || session.user.username }}</span>
-      <select :value="session.user.tenantId" @change="changeTenant">
-        <option v-for="tenant in session.user.tenants || []" :key="tenant.tenantId" :value="tenant.tenantId">
-          {{ tenant.tenantName }}
-        </option>
-      </select>
+      <strong>{{ currentTenantName }}</strong>
     </section>
 
     <router-view />
@@ -41,16 +37,15 @@ const titles: Record<string, string> = {
   '/home': '老师工作台',
   '/classes': '我的班级',
   '/students': '我的学生',
-  '/growth': '成长记录',
+  '/growth': '学生成长记录',
   '/leave': '请假处理',
   '/info': '园所信息'
 }
 const title = computed(() => titles[route.path] || '老师端')
-
-async function changeTenant(event: Event) {
-  const tenantId = (event.target as HTMLSelectElement).value
-  if (tenantId) await session.changeTenant(tenantId)
-}
+const currentTenantName = computed(() => {
+  const tenants = session.user?.tenants || []
+  return tenants.find((item) => String(item.tenantId) === String(session.user?.tenantId))?.tenantName || '当前园所'
+})
 
 function logout() {
   session.clear()

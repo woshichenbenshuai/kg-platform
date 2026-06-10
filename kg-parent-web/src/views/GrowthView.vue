@@ -3,7 +3,7 @@
     <section class="module-head">
       <div>
         <p>老师记录</p>
-        <h2>成长记录</h2>
+        <h2>{{ currentChildName }}的成长记录</h2>
       </div>
       <button @click="load">刷新</button>
     </section>
@@ -14,23 +14,28 @@
           <b>{{ item.title || '成长记录' }}</b>
           <span>{{ item.recordDate || '-' }}</span>
         </div>
-        <span>{{ item.studentName || '孩子' }}</span>
+        <span>{{ item.studentName || currentChildName }}</span>
         <p>{{ item.content || '暂无内容' }}</p>
       </article>
-      <p v-if="rows.length === 0" class="empty">暂无成长记录</p>
+      <p v-if="rows.length === 0" class="empty">当前孩子暂无成长记录</p>
     </section>
   </main>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { growthRecords } from '@/api/parent'
+import { useChildStore } from '@/stores/child'
 
+const childStore = useChildStore()
 const rows = ref<Array<Record<string, any>>>([])
+const currentChildName = computed(() => childStore.currentChild?.studentName || '当前孩子')
 
 async function load() {
-  rows.value = (await growthRecords()).data.data
+  if (childStore.children.length === 0) await childStore.loadChildren()
+  rows.value = childStore.currentChildId ? (await growthRecords(childStore.currentChildId)).data.data : []
 }
 
+watch(() => childStore.currentChildId, load)
 onMounted(load)
 </script>

@@ -4,11 +4,11 @@
       <div>
         <span class="eyebrow">KG PLATFORM</span>
         <h1>{{ greeting }}，{{ userStore.username || '管理员' }}</h1>
-        <p>这里汇总当前账号可访问的园所、角色和业务模块。选择一个常用入口，继续处理园所日常运营。</p>
+        <p>这里是平台超级管理员的管理工作台，负责幼儿园租户配置、账号权限、菜单字典等管理端能力。</p>
       </div>
-      <div class="tenant-badge">
-        <span>当前园所</span>
-        <strong>{{ currentTenantName }}</strong>
+      <div class="platform-badge">
+        <span>当前身份</span>
+        <strong>{{ primaryRole }}</strong>
       </div>
     </section>
 
@@ -24,8 +24,8 @@
       <el-card class="quick-card" shadow="never">
         <template #header>
           <div class="section-title">
-            <span>快捷工作区</span>
-            <small>按高频园务场景进入</small>
+            <span>管理入口</span>
+            <small>平台配置、账号权限和基础数据</small>
           </div>
         </template>
         <div class="quick-list">
@@ -59,8 +59,8 @@
           <strong>{{ userStore.username || '-' }}</strong>
         </div>
         <div class="profile-line">
-          <span>租户 ID</span>
-          <strong>{{ permissionStore.tenantId ?? '无' }}</strong>
+          <span>租户上下文</span>
+          <strong>{{ permissionStore.tenantId ?? '平台级' }}</strong>
         </div>
         <div class="role-tags">
           <el-tag v-for="role in visibleRoles" :key="role" effect="plain" round>{{ role }}</el-tag>
@@ -76,18 +76,15 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { usePermissionStore } from '@/store/permission'
-import { Bell, Calendar, Dish, OfficeBuilding, Reading, School } from '@element-plus/icons-vue'
+import { Lock, Menu, Notebook, OfficeBuilding, User } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const userStore = useUserStore()
 const permissionStore = usePermissionStore()
 
-const currentTenantName = computed(() => {
-  const current = permissionStore.tenants.find(item => String(item.tenantId) === String(permissionStore.tenantId))
-  return current?.tenantName || '未选择园所'
-})
-
 const visibleRoles = computed(() => permissionStore.roleNames.length > 0 ? permissionStore.roleNames : permissionStore.roleCodes)
+const primaryRole = computed(() => visibleRoles.value[0] || '平台管理员')
+const platformMenuCount = computed(() => permissionStore.menus.filter(menu => menu.menuScope === 'PLATFORM').length)
 
 const greeting = computed(() => {
   const hour = new Date().getHours()
@@ -99,14 +96,14 @@ const greeting = computed(() => {
 
 const metrics = computed(() => [
   {
-    label: '可用菜单',
-    value: permissionStore.menus.length,
-    hint: '按角色授权展示'
+    label: '平台菜单',
+    value: platformMenuCount.value,
+    hint: '平台管理员可见的管理端入口'
   },
   {
-    label: '绑定园所',
-    value: permissionStore.tenants.length,
-    hint: '可在右上角切换'
+    label: '租户上下文',
+    value: permissionStore.tenantId ?? '无',
+    hint: '超级管理员保持平台级上下文，不切入单个园所'
   },
   {
     label: '角色身份',
@@ -117,40 +114,34 @@ const metrics = computed(() => [
 
 const quickActions = [
   {
-    title: '园所配置',
-    desc: '开通园所与管理员账号',
+    title: '幼儿园配置',
+    desc: '开通幼儿园、生成租户库并创建园所管理员',
     path: '/platform/tenants',
     icon: OfficeBuilding
   },
   {
-    title: '教师管理',
-    desc: '维护教师档案和登录账号',
-    path: '/kinder/teachers',
-    icon: School
+    title: '菜单管理',
+    desc: '维护管理端菜单、路由和展示顺序',
+    path: '/platform/menu',
+    icon: Menu
   },
   {
-    title: '幼儿档案',
-    desc: '管理班级、学生和家长关系',
-    path: '/kinder/students',
-    icon: Reading
+    title: '用户管理',
+    desc: '维护平台账号和管理端用户状态',
+    path: '/system/users',
+    icon: User
   },
   {
-    title: '通知公告',
-    desc: '发布园所通知和家园消息',
-    path: '/kinder/notices',
-    icon: Bell
+    title: '角色权限',
+    desc: '配置角色可访问的管理端菜单',
+    path: '/system/role-menus',
+    icon: Lock
   },
   {
-    title: '每日食谱',
-    desc: '维护每日餐食安排',
-    path: '/kinder/recipes',
-    icon: Dish
-  },
-  {
-    title: '请假审批',
-    desc: '处理幼儿请假申请',
-    path: '/kinder/leave-requests',
-    icon: Calendar
+    title: '字典管理',
+    desc: '维护平台基础字典和字典值',
+    path: '/system/dicts',
+    icon: Notebook
   }
 ]
 </script>
@@ -220,7 +211,7 @@ const quickActions = [
   line-height: 1.8;
 }
 
-.tenant-badge {
+.platform-badge {
   position: relative;
   z-index: 1;
   min-width: 210px;
@@ -231,7 +222,7 @@ const quickActions = [
   backdrop-filter: blur(18px);
 }
 
-.tenant-badge span,
+.platform-badge span,
 .metric-card span,
 .section-title small,
 .profile-line span,
@@ -239,12 +230,12 @@ const quickActions = [
   color: var(--kg-muted);
 }
 
-.tenant-badge span {
+.platform-badge span {
   color: rgba(248, 255, 251, 0.6);
   font-size: 12px;
 }
 
-.tenant-badge strong {
+.platform-badge strong {
   display: block;
   margin-top: 8px;
   font-size: 20px;

@@ -2,42 +2,43 @@
   <main class="content-stack">
     <section class="module-head">
       <div>
-        <p>绑定信息</p>
-        <h2>我的孩子</h2>
+        <p>当前孩子</p>
+        <h2>{{ currentChild?.studentName || '我的孩子' }}</h2>
       </div>
       <button @click="load">刷新</button>
     </section>
 
     <section class="panel">
-      <article v-for="item in rows" :key="String(item.id)" class="list-card">
+      <article v-if="currentChild" class="list-card current-child-detail-card">
         <div class="row-title">
-          <b>{{ item.studentName || '未命名孩子' }}</b>
-          <span>{{ item.relationType || '监护人' }}</span>
+          <b>{{ currentChild.studentName || '未命名孩子' }}</b>
+          <span>{{ currentChild.relationType || '监护人' }}</span>
         </div>
         <dl>
           <dt>学号</dt>
-          <dd>{{ item.studentNo || '-' }}</dd>
+          <dd>{{ currentChild.studentNo || '-' }}</dd>
           <dt>班级</dt>
-          <dd>{{ item.gradeName || '-' }} {{ item.className || '' }}</dd>
+          <dd>{{ currentChild.gradeName || '-' }} {{ currentChild.className || '' }}</dd>
           <dt>性别</dt>
-          <dd>{{ item.gender || '-' }}</dd>
+          <dd>{{ currentChild.gender || '-' }}</dd>
           <dt>生日</dt>
-          <dd>{{ item.birthday || '-' }}</dd>
+          <dd>{{ currentChild.birthday || '-' }}</dd>
         </dl>
       </article>
-      <p v-if="rows.length === 0" class="empty">暂无绑定孩子</p>
+      <p v-else class="empty">暂无绑定孩子</p>
     </section>
   </main>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { children } from '@/api/parent'
+import { computed, onMounted } from 'vue'
+import { useChildStore } from '@/stores/child'
 
-const rows = ref<Array<Record<string, any>>>([])
+const childStore = useChildStore()
+const currentChild = computed(() => childStore.currentChild)
 
 async function load() {
-  rows.value = (await children()).data.data
+  await childStore.loadChildren()
 }
 
 onMounted(load)

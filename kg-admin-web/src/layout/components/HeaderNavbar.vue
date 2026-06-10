@@ -8,13 +8,13 @@
       </el-button>
       <div class="route-copy">
         <span>{{ currentTitle }}</span>
-        <strong>幼儿园运营平台</strong>
+        <strong>平台管理中心</strong>
       </div>
     </div>
 
     <div class="right-menu">
       <el-select
-        v-if="tenantOptions.length > 0"
+        v-if="showTenantSwitcher"
         v-model="currentTenantId"
         class="tenant-select"
         placeholder="选择园所"
@@ -64,7 +64,9 @@ const userStore = useUserStore()
 const permissionStore = usePermissionStore()
 
 const username = computed(() => userStore.username)
-const tenantOptions = computed(() => permissionStore.tenants || [])
+const isPlatformAdmin = computed(() => permissionStore.roleCodes.includes('PLATFORM_ADMIN'))
+const tenantOptions = computed(() => isPlatformAdmin.value ? [] : permissionStore.tenants || [])
+const showTenantSwitcher = computed(() => !isPlatformAdmin.value && tenantOptions.value.length > 0)
 const currentTenantId = computed({
   get: () => permissionStore.tenantId,
   set: () => {}
@@ -77,6 +79,7 @@ const currentTitle = computed(() => {
   const titleMap: Record<string, string> = {
     '/': '工作台',
     '/platform/tenants': '园所配置',
+    '/platform/menu': '菜单管理',
     '/kinder/teachers': '教师管理',
     '/kinder/classes': '班级管理',
     '/kinder/students': '幼儿管理',
@@ -105,7 +108,7 @@ const refreshCurrentUser = async () => {
 }
 
 const handleTenantChange = async (tenantId: number | string) => {
-  if (!tenantId || String(tenantId) === String(permissionStore.tenantId)) {
+  if (isPlatformAdmin.value || !tenantId || String(tenantId) === String(permissionStore.tenantId)) {
     return
   }
   const response = await switchTenant(tenantId)

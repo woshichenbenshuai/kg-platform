@@ -30,10 +30,14 @@ textarea { min-height: 96px; }
 .tenant-card, .hero-card, .panel, .metric-card, .list-card, .module-head { border: 1px solid rgba(121, 75, 44, .08); background: rgba(255, 255, 255, .82); box-shadow: 0 16px 50px rgba(165, 91, 54, .1); backdrop-filter: blur(14px); }
 .tenant-card { display: grid; gap: 10px; border-radius: 22px; padding: 14px; margin-bottom: 16px; }
 .tenant-card span { font-weight: 900; }
+.parent-line { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+.parent-line strong { color: #a34d2b; font-size: 13px; }
+.child-switch-card label { display: grid; gap: 8px; font-weight: 900; font-size: 13px; }
 .content-stack { display: grid; gap: 16px; }
 .hero-card { border-radius: 30px; padding: 24px; background: linear-gradient(135deg, #e9783d, #efb047); color: white; }
 .hero-card p { margin: 0 0 8px; opacity: .85; }
 .hero-card h2 { margin: 0; font-size: 27px; line-height: 1.25; }
+.hero-summary { margin-top: 14px; color: rgba(255, 255, 255, .84); font-weight: 900; }
 .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
 .hero-actions a { padding: 10px 14px; border-radius: 999px; background: rgba(255, 255, 255, .2); font-weight: 900; }
 .metric-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -44,6 +48,9 @@ textarea { min-height: 96px; }
 .panel { border-radius: 24px; padding: 16px; }
 .panel h3 { margin: 0 0 12px; }
 .list-card { border-radius: 20px; padding: 14px; margin-bottom: 10px; display: grid; gap: 10px; }
+.child-select-card { cursor: pointer; transition: transform .16s ease, border-color .16s ease; }
+.child-select-card.active { border-color: rgba(233, 120, 61, .65); box-shadow: 0 16px 50px rgba(233, 120, 61, .18); transform: translateY(-1px); }
+.current-child-card { border-color: rgba(233, 120, 61, .32); background: linear-gradient(180deg, rgba(255, 255, 255, .94), rgba(255, 248, 238, .9)); }
 .list-card span { color: rgba(53, 33, 22, .58); font-size: 12px; }
 .card-actions, .drawer-actions, .search-panel { display: flex; gap: 10px; }
 .danger { background: #c7493a; }

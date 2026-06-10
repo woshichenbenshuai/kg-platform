@@ -9,6 +9,8 @@ const router = createRouter({
   routes
 })
 
+const PLATFORM_ADMIN = 'PLATFORM_ADMIN'
+
 router.beforeEach(async (to) => {
   const userStore = useUserStore()
   const permissionStore = usePermissionStore()
@@ -36,6 +38,10 @@ router.beforeEach(async (to) => {
       permissionStore.clearPermission()
       return `/login?redirect=${encodeURIComponent(to.fullPath)}`
     }
+  }
+
+  if (permissionStore.roleCodes.includes(PLATFORM_ADMIN) && to.path.startsWith('/kinder')) {
+    return '/'
   }
 
   return true

@@ -33,6 +33,11 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('@/views/platform/TenantConfigView.vue')
       },
       {
+        path: 'platform/menu',
+        name: 'platform-menu',
+        component: () => import('@/views/system/menu/MenuView.vue')
+      },
+      {
         path: 'kinder',
         redirect: '/kinder/teachers'
       },

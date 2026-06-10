@@ -43,7 +43,7 @@
 
     <div v-if="!isCollapse" class="sidebar-footer">
       <span class="pulse" />
-      <span>园所服务在线</span>
+      <span>管理服务在线</span>
     </div>
   </div>
 </template>
@@ -75,9 +75,12 @@ const appStore = useAppStore()
 const permissionStore = usePermissionStore()
 
 const isCollapse = computed(() => !appStore.sidebar.opened)
+const isPlatformAdmin = computed(() => permissionStore.roleCodes.includes('PLATFORM_ADMIN'))
 
 const treeMenus = computed(() => {
-  const menus = permissionStore.menus || []
+  const menus = isPlatformAdmin.value
+    ? (permissionStore.menus || []).filter(item => item.menuScope === 'PLATFORM')
+    : permissionStore.menus || []
   const map = new Map<string, MenuDto & { children: MenuDto[] }>()
   menus.forEach(item => {
     map.set(String(item.id), { ...item, children: [] })

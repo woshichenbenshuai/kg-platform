@@ -1,13 +1,13 @@
 <template>
   <main class="login-page">
     <section class="login-card">
-      <p class="eyebrow">Kinder Garden</p>
-      <h1>园长端</h1>
-      <p class="sub">面向园所负责人的移动 Web 工作台，后续可迁移小程序。</p>
+      <p class="eyebrow">Kinder Operations</p>
+      <h1>园所管理</h1>
+      <p class="sub">面向本园负责人的移动 Web 入口，集中处理园务建档、班级分配、学生家长绑定和全园通知。</p>
       <form @submit.prevent="submit">
         <label>账号<input v-model="form.username" autocomplete="username" placeholder="请输入账号" /></label>
         <label>密码<input v-model="form.password" autocomplete="current-password" type="password" placeholder="请输入密码" /></label>
-        <button :disabled="loading">{{ loading ? '登录中...' : '进入园所' }}</button>
+        <button :disabled="loading">{{ loading ? '登录中...' : '进入园所管理' }}</button>
       </form>
       <p class="error" v-if="error">{{ error }}</p>
     </section>

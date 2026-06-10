@@ -10,11 +10,3 @@ export function login(username: string, password: string) {
 export function currentUser() {
   return http.get<ApiResponse<CurrentUserDto>>('/auth/current-user')
 }
-
-export function tenants() {
-  return http.get<ApiResponse<CurrentUserDto['tenants']>>('/auth/tenants')
-}
-
-export function switchTenant(tenantId: string | number) {
-  return http.post<ApiResponse<LoginDto>>('/auth/switch-tenant', { tenantId })
-}

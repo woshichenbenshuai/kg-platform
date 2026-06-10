@@ -30,6 +30,7 @@ textarea { min-height: 96px; }
 .tenant-card, .hero-card, .panel, .metric-card, .list-card, .module-head { border: 1px solid rgba(28, 64, 104, .08); background: rgba(255, 255, 255, .8); box-shadow: 0 16px 50px rgba(36, 92, 160, .1); backdrop-filter: blur(14px); }
 .tenant-card { display: grid; gap: 10px; border-radius: 22px; padding: 14px; margin-bottom: 16px; }
 .tenant-card span { font-weight: 900; }
+.tenant-card strong { color: #245ca0; font-size: 16px; }
 .content-stack { display: grid; gap: 16px; }
 .hero-card { border-radius: 30px; padding: 24px; background: linear-gradient(135deg, #2672e8, #34b6b0); color: white; }
 .hero-card p { margin: 0 0 8px; opacity: .85; }
@@ -44,6 +45,11 @@ textarea { min-height: 96px; }
 .panel { border-radius: 24px; padding: 16px; }
 .panel h3 { margin: 0 0 12px; }
 .list-card { border-radius: 20px; padding: 14px; margin-bottom: 10px; display: grid; gap: 10px; }
+.student-growth-card { background: rgba(255, 255, 255, .9); }
+.growth-records { display: grid; gap: 10px; }
+.growth-mini-card { border-radius: 16px; padding: 12px; background: rgba(38, 114, 232, .08); display: grid; gap: 8px; }
+.growth-mini-card p { margin: 0; line-height: 1.7; }
+.inline-empty { margin: 4px 0 0; }
 .list-card span { color: rgba(24, 43, 58, .58); font-size: 12px; }
 .card-actions, .drawer-actions { display: flex; gap: 10px; }
 .danger { background: #c7493a; }

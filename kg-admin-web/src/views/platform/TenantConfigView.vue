@@ -43,13 +43,15 @@
               <el-tag :type="row.status ? 'success' : 'danger'">{{ row.status ? '启用' : '停用' }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" fixed="right" width="430" align="center">
+          <el-table-column label="操作" min-width="310" align="center">
             <template #default="{ row }">
-              <el-button type="primary" link size="small" @click="handleEditTenant(row)">编辑</el-button>
-              <el-button v-if="!row.hasDatabase" type="warning" link size="small" @click="handleGenerateDatabase(row)">生成幼儿园数据库</el-button>
-              <el-button type="success" link size="small" @click="handleOpenOperator(row)">开通管理员</el-button>
-              <el-button type="success" link size="small" @click="handleDbInfo(row)">数据库信息</el-button>
-              <el-button type="danger" link size="small" :disabled="row.hasDatabase" @click="handleDeleteTenant(row)">删除</el-button>
+              <div class="tenant-actions">
+                <el-button type="primary" link size="small" @click="handleEditTenant(row)">编辑</el-button>
+                <el-button v-if="!row.hasDatabase" type="warning" link size="small" @click="handleGenerateDatabase(row)">生成数据库</el-button>
+                <el-button type="success" link size="small" @click="handleOpenOperator(row)">开通管理员</el-button>
+                <el-button type="success" link size="small" @click="handleDbInfo(row)">数据库信息</el-button>
+                <el-button type="danger" link size="small" :disabled="row.hasDatabase" @click="handleDeleteTenant(row)">删除</el-button>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -329,5 +331,16 @@ onMounted(() => {
   display: flex;
   justify-content: flex-end;
   margin-top: 15px;
+}
+
+.tenant-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 10px;
+}
+
+.tenant-actions :deep(.el-button) {
+  margin-left: 0;
 }
 </style>

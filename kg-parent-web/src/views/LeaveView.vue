@@ -3,7 +3,7 @@
     <section class="module-head">
       <div>
         <p>出勤沟通</p>
-        <h2>请假申请</h2>
+        <h2>{{ currentChildName }}的请假</h2>
       </div>
       <button @click="open">提交</button>
     </section>
@@ -11,7 +11,7 @@
     <section class="panel">
       <article v-for="item in rows" :key="String(item.id)" class="list-card">
         <div class="row-title">
-          <b>{{ item.studentName || `学生 ${item.studentId || '-'}` }}</b>
+          <b>{{ item.studentName || currentChildName }}</b>
           <span>{{ statusText(item.approveStatus) }}</span>
         </div>
         <dl>
@@ -25,15 +25,15 @@
           <dd>{{ item.approveRemark || '-' }}</dd>
         </dl>
       </article>
-      <p v-if="rows.length === 0" class="empty">暂无请假记录</p>
+      <p v-if="rows.length === 0" class="empty">当前孩子暂无请假记录</p>
     </section>
 
     <div v-if="form" class="drawer-mask" @click.self="form = null">
       <form class="drawer" @submit.prevent="submit">
         <h3>提交请假</h3>
         <label>
-          学生ID
-          <input v-model="form.studentId" type="number" placeholder="请输入学生ID" />
+          孩子
+          <input :value="currentChildName" disabled />
         </label>
         <label>
           开始日期
@@ -57,11 +57,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { leaveRequests, submitLeaveRequest } from '@/api/parent'
+import { useChildStore } from '@/stores/child'
 
+const childStore = useChildStore()
 const rows = ref<Array<Record<string, any>>>([])
 const form = ref<Record<string, any> | null>(null)
+const currentChildName = computed(() => childStore.currentChild?.studentName || '当前孩子')
 
 function statusText(status: unknown) {
   const value = String(status || 'PENDING')
@@ -71,20 +74,23 @@ function statusText(status: unknown) {
 }
 
 async function load() {
-  rows.value = (await leaveRequests()).data.data
+  if (childStore.children.length === 0) await childStore.loadChildren()
+  rows.value = childStore.currentChildId ? (await leaveRequests(childStore.currentChildId)).data.data : []
 }
 
 function open() {
+  if (!childStore.currentChildId) return alert('请先选择孩子')
   const today = new Date().toISOString().slice(0, 10)
-  form.value = { studentId: '', startDate: today, endDate: today, reason: '' }
+  form.value = { studentId: childStore.currentChildId, startDate: today, endDate: today, reason: '' }
 }
 
 async function submit() {
   if (!form.value) return
-  await submitLeaveRequest(form.value)
+  await submitLeaveRequest({ ...form.value, studentId: childStore.currentChildId })
   form.value = null
   await load()
 }
 
+watch(() => childStore.currentChildId, load)
 onMounted(load)
 </script>

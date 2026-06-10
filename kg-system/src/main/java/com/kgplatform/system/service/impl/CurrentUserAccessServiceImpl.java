@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
 
     private static final String PLATFORM_ADMIN = "PLATFORM_ADMIN";
+    private static final String PLATFORM_MENU_SCOPE = "PLATFORM";
 
     private final IUserService userService;
     private final IUserTenantService userTenantService;
@@ -122,18 +123,7 @@ public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
                 .distinct()
                 .collect(Collectors.toList());
         if (roleCodes.contains(PLATFORM_ADMIN)) {
-            return tenantService.list(Wrappers.<Tenant>lambdaQuery()
-                            .eq(Tenant::getDeleteStatus, Boolean.FALSE)
-                            .eq(Tenant::getStatus, Boolean.TRUE)
-                            .orderByAsc(Tenant::getId))
-                    .stream()
-                    .map(tenant -> new CurrentUserTenantDto()
-                            .setTenantId(tenant.getId())
-                            .setTenantCode(tenant.getTenantCode())
-                            .setTenantName(tenant.getTenantName())
-                            .setIdentityType("PLATFORM_ADMIN")
-                            .setDefaultFlag(Boolean.FALSE))
-                    .collect(Collectors.toList());
+            return Collections.emptyList();
         }
 
         List<UserTenant> userTenants = userTenantService.list(Wrappers.<UserTenant>lambdaQuery()
@@ -185,9 +175,6 @@ public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
-        if (roleCodes.contains(PLATFORM_ADMIN)) {
-            return;
-        }
         boolean accessible = getAccessibleTenants(userId).stream()
                 .anyMatch(tenant -> Objects.equals(tenant.getTenantId(), tenantId));
         Asserts.isTrue(accessible, "Current user cannot access target tenant");
@@ -277,6 +264,8 @@ public class CurrentUserAccessServiceImpl implements ICurrentUserAccessService {
                         .orderByAsc(Menu::getSortNo)
                         .orderByAsc(Menu::getId)))
                 .stream()
+                .filter(menu -> !roles.stream().anyMatch(role -> PLATFORM_ADMIN.equals(role.getRoleCode()))
+                        || PLATFORM_MENU_SCOPE.equals(menu.getMenuScope()))
                 .sorted(Comparator.comparing(MenuDto::getSortNo, Comparator.nullsLast(Integer::compareTo))
                         .thenComparing(MenuDto::getId, Comparator.nullsLast(Long::compareTo)))
                 .collect(Collectors.toList());
