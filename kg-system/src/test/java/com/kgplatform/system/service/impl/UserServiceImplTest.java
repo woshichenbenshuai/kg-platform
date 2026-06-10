@@ -1,10 +1,13 @@
 package com.kgplatform.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.kgplatform.common.web.exception.ApiException;
 import com.kgplatform.system.domain.convert.UserConverter;
 import com.kgplatform.system.domain.po.User;
+import com.kgplatform.system.domain.po.UserRole;
 import com.kgplatform.system.domain.vo.UserVo;
 import com.kgplatform.system.mapper.UserMapper;
+import com.kgplatform.system.service.IUserRoleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -25,8 +27,9 @@ class UserServiceImplTest {
     @Test
     void save_should_reject_duplicate_username() throws Exception {
         UserMapper userMapper = mock(UserMapper.class);
+        IUserRoleService userRoleService = mock(IUserRoleService.class);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        UserServiceImpl service = new UserServiceImpl(UserConverter.INSTANCE, passwordEncoder);
+        UserServiceImpl service = new UserServiceImpl(UserConverter.INSTANCE, passwordEncoder, userRoleService);
         setBaseMapper(service, userMapper);
 
         doReturn(1L).when(userMapper).selectCount(any());
@@ -40,8 +43,9 @@ class UserServiceImplTest {
     @Test
     void save_should_encode_password_before_insert() throws Exception {
         UserMapper userMapper = mock(UserMapper.class);
+        IUserRoleService userRoleService = mock(IUserRoleService.class);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        UserServiceImpl service = new UserServiceImpl(UserConverter.INSTANCE, passwordEncoder);
+        UserServiceImpl service = new UserServiceImpl(UserConverter.INSTANCE, passwordEncoder, userRoleService);
         setBaseMapper(service, userMapper);
 
         doReturn(0L).when(userMapper).selectCount(any());
@@ -54,6 +58,8 @@ class UserServiceImplTest {
         verify(userMapper).insert(captor.capture());
         assertNotEquals("123456", captor.getValue().getPassword());
         assertTrue(passwordEncoder.matches("123456", captor.getValue().getPassword()));
+        verify(userRoleService, never()).update(org.mockito.ArgumentMatchers.<Wrapper<UserRole>>any());
+        verify(userRoleService, never()).save(any());
     }
 
     private void setBaseMapper(UserServiceImpl service, UserMapper userMapper) throws Exception {

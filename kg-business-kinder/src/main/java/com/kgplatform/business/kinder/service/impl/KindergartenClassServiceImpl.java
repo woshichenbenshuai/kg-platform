@@ -27,6 +27,7 @@ public class KindergartenClassServiceImpl extends ServiceImpl<KindergartenClassM
         LambdaQueryWrapper<KindergartenClass> query = Wrappers.<KindergartenClass>lambdaQuery()
                 .eq(KindergartenClass::getDeleteStatus, Boolean.FALSE)
                 .eq(queryVo.getStatus() != null, KindergartenClass::getStatus, queryVo.getStatus())
+                .eq(queryVo.getHeadTeacherId() != null, KindergartenClass::getHeadTeacherId, queryVo.getHeadTeacherId())
                 .like(queryVo.getClassName() != null && !queryVo.getClassName().isBlank(), KindergartenClass::getClassName, queryVo.getClassName())
                 .eq(queryVo.getClassCode() != null && !queryVo.getClassCode().isBlank(), KindergartenClass::getClassCode, queryVo.getClassCode())
                 .orderByDesc(KindergartenClass::getCreateTime);
@@ -82,6 +83,7 @@ public class KindergartenClassServiceImpl extends ServiceImpl<KindergartenClassM
                 .setClassCode(vo.getClassCode())
                 .setClassName(vo.getClassName())
                 .setGradeName(vo.getGradeName())
+                .setHeadTeacherId(vo.getHeadTeacherId())
                 .setStatus(vo.getStatus());
         entity.setId(vo.getId());
         return entity;
@@ -93,6 +95,7 @@ public class KindergartenClassServiceImpl extends ServiceImpl<KindergartenClassM
                 .setClassCode(entity.getClassCode())
                 .setClassName(entity.getClassName())
                 .setGradeName(entity.getGradeName())
+                .setHeadTeacherId(entity.getHeadTeacherId())
                 .setStatus(entity.getStatus())
                 .setDeleteStatus(entity.getDeleteStatus())
                 .setCreateTime(entity.getCreateTime());

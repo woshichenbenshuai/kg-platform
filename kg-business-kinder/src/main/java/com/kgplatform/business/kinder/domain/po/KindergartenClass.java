@@ -42,6 +42,10 @@ public class KindergartenClass extends BaseAuditingEntity<Long> implements Seria
     @Size(max = 100, message = "年级名称字段过长")
     private String gradeName;
 
+    @Schema(description = "班主任教师ID")
+    @TableField("head_teacher_id")
+    private Long headTeacherId;
+
     @Schema(description = "状态 1启用 0禁用")
     @TableField("status")
     private Integer status;

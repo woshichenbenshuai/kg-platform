@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS kindergarten_class (
   class_code VARCHAR(64) NOT NULL COMMENT 'Class code',
   class_name VARCHAR(100) NOT NULL COMMENT 'Class name',
   grade_name VARCHAR(100) DEFAULT NULL COMMENT 'Grade name',
+  head_teacher_id BIGINT(20) DEFAULT NULL COMMENT 'Head teacher id',
   status TINYINT(1) NOT NULL DEFAULT 1 COMMENT 'Status',
   delete_status BIT(1) NOT NULL DEFAULT b'0' COMMENT 'Logical delete',
   create_by VARCHAR(64) DEFAULT NULL COMMENT 'Created by',
@@ -27,6 +28,7 @@ CREATE TABLE IF NOT EXISTS kindergarten_class (
   last_modified_by VARCHAR(64) DEFAULT NULL COMMENT 'Last modified by',
   last_modified_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Last modified time',
   PRIMARY KEY (id),
+  KEY idx_class_head_teacher (head_teacher_id),
   UNIQUE KEY uk_class_code (class_code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Kindergarten class';
 

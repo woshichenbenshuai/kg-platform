@@ -33,6 +33,9 @@ public class KindergartenClassDto implements Serializable {
 
     private String gradeName;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long headTeacherId;
+
     private Integer status;
 
     private Boolean deleteStatus;

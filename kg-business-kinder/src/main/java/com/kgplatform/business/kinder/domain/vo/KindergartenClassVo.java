@@ -39,6 +39,10 @@ public class KindergartenClassVo extends BaseVo {
     @Size(max = 100, message = "年级名称字段过长")
     private String gradeName;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @Schema(description = "班主任教师ID")
+    private Long headTeacherId;
+
     @Schema(description = "状态 1启用 0禁用")
     private Integer status;
 }
